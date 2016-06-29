@@ -16,7 +16,6 @@ namespace AshyPhysics
             if (Engine.I == null) 
                 return                  ( EngineStatus.CriticalFailed );
 
-
             Engine.I.CollisionShapes    = new List<CollisionShape>();
             Engine.I.BroadPhase         = new DbvtBroadphase();
             Engine.I.Collisions         = new DefaultCollisionConfiguration();
@@ -42,10 +41,10 @@ namespace AshyPhysics
 
         public EngineStatus Free()
         {
-            I                       = null;
+            I                           = null;
 
-            Engine.I                = null;
-            return                  ( EngineStatus.Free );
+            Engine.I                    = null;
+            return                      ( EngineStatus.Free );
         }
     }
 }

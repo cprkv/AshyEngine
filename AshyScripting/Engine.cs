@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AshyCore.EntityManagement;
 using AshyCore.EntitySystem;
 using NLua;
+using AshyCommon;
 
 namespace AshyScripting
 {
@@ -11,34 +12,41 @@ namespace AshyScripting
     {
         #region Internal Usage
 
-        internal static Engine I { get; set; }
+        internal static Engine                      I { get; set; }
 
-        internal Lua LuaState { get; set; }
+        internal Lua                                LuaState { get; set; }
 
-        internal Dictionary<Entity, LuaFunction> UpdateFunctions { get; set; }
+        internal Dictionary<Entity, LuaFunction>    UpdateFunctions { get; set; }
 
-        internal List<ScriptTrigger> Triggers { get; set; }
+        internal List<ScriptTrigger>                Triggers { get; set; }
 
         #endregion
 
 
         #region IScriptingEngine
 
-        public EngineStatus Status { get; internal set; }
+        public EngineStatus             Status { get; internal set; }
 
         public ITrigger AttachTrigger(IZone zone, Script trigger, Entity e)
         {
-            throw new NotImplementedException();
+            var scriptTrigger           = new PrivateScriptTrigger(LuaState, zone, trigger, e);
+            Triggers.Add                ( scriptTrigger );
+
+            return                      ( scriptTrigger );
         }
 
         public ITrigger AttachTrigger(IZone zone, Script trigger, IEnumerable<Entity> entities)
         {
-            throw new NotImplementedException();
+            var scriptTrigger           = new ScriptTrigger(LuaState, zone, trigger, entities);
+            Triggers.Add                ( scriptTrigger );
+
+            return                      ( scriptTrigger );
         }
 
         public void Tick(float dtime)
         {
-            throw new NotImplementedException();
+            Triggers.ForEach            ( x => x.AcceptTrigger() );
+            UpdateFunctions.ForEach     ( f => f.Value.Call(f.Key, dtime) );
         }
 
         #endregion

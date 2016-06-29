@@ -10,7 +10,5 @@ namespace AshyCore
     {
         int Width { get; }
         int Height { get; }
-
-        IWindow GameWindow { get; }
     }
 }

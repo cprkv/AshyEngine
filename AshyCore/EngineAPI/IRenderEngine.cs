@@ -16,6 +16,7 @@ namespace AshyCore.EngineAPI
     /// <remarks>
     public interface IRenderEngine : IEngine
     {
-        IWindow GameWindow { get; }
+        //todo: temperary
+        //IWindow GameWindow { get; }
     }
 }
