@@ -5,6 +5,8 @@
 // This product are licensed under MICROSOFT REFERENCE SOURCE LICENSE(MS-RSL).
 // 
 
+using AshyCore.EngineAPI.EngineCommands;
+
 namespace AshyCore.EngineAPI
 {
     public enum EngineStatus
@@ -19,7 +21,13 @@ namespace AshyCore.EngineAPI
 
     public interface IEngine
     {
+        /// <summary>
+        /// Simulation of engine through delta time.
+        /// </summary>
+        /// <param name="dtime">Time of last frame in ms.</param>
         void Tick(float dtime);
+
+        IEngineCommandHandler CommandHandler { get; }
 
         EngineStatus Status { get; }
     }

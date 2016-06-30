@@ -101,7 +101,10 @@
     <Compile Include="Debug\Critical.cs" />
     <Compile Include="CoreAPI.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="EngineAPI\EngineCommands\EngineCommandProcessor.cs" />
+    <Compile Include="EngineAPI\EngineCommands\LoadLevel.cs" />
     <Compile Include="EngineAPI\EngineProxy.cs" />
+    <Compile Include="EngineAPI\EngineCommands\IEngineCommand.cs" />
     <Compile Include="EngineAPI\IGameEngine.cs" />
     <Compile Include="EngineOld.cs" />
     <Compile Include="EngineAPI\ICoreEngine.cs" />

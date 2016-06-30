@@ -17,10 +17,10 @@ namespace AshyGame
             EngineStatus[] status       = new EngineStatus[5];
 
             status[0] = Proxy.Core      .Preinitialize(_user);
+            status[4] = Proxy.Game      .Preinitialize(_user); // todo: order??
             status[1] = Proxy.Physics   .Preinitialize(_user);
             status[2] = Proxy.Scripting .Preinitialize(_user);
             status[3] = Proxy.Render    .Preinitialize(_user);
-            status[4] = Proxy.Game      .Preinitialize(_user);
 
             return                      status.All(s => s > EngineStatus.Failed) 
                                             ? ( EngineStatus.ReadyToLoad ) 
@@ -32,10 +32,10 @@ namespace AshyGame
             EngineStatus[] status       = new EngineStatus[5];
 
             status[0] = Proxy.Core      .Initialize();
-            status[1] = Proxy.Physics   .Initialize();
-            status[2] = Proxy.Scripting .Initialize();
-            status[3] = Proxy.Render    .Initialize();
             status[4] = Proxy.Game      .Initialize();
+            status[1] = Proxy.Physics   .Initialize();
+            status[2] = Proxy.Scripting .Initialize(); // todo: order??
+            status[3] = Proxy.Render    .Initialize();
 
             if (!status.Any(s => s == EngineStatus.CriticalFailed))
             {

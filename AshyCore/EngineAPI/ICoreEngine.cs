@@ -9,12 +9,12 @@ namespace AshyCore.EngineAPI
 {
     public interface ICoreEngine : IEngine
     {
-        Resource.ResourceManager RM { get; set; }
+        Resource.ResourceManager    RM { get; set; }
 
-        VFS.IFileSystem FS { get; set; }
+        VFS.IFileSystem             FS { get; set; }
 
-        Log Log { get; set; }
+        Log                         Log { get; set; }
 
-        ConfigTable UserConfig { get; set; }
+        ConfigTable                 UserConfig { get; set; }
     }
 }

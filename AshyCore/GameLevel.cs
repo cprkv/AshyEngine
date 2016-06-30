@@ -20,15 +20,16 @@ namespace AshyCore
     {
         #region Properties
 
-        public List<Entity> Entities;
+        public List<Entity>                 Entities;
 
-        public Player Player;
+        public Player                       Player;
 
-        public string Name { get; }
+        public string                       Name { get; }
 
-        public ConfigTable LevelInfo { get; }
+        public ConfigTable                  LevelInfo { get; }
 
-        public Dictionary<string, IZone> Zones { get; private set; }
+        public Dictionary<string, IZone>    Zones { get; private set; }
+
         public Dictionary<string, ITrigger> Triggers { get; private set; }
 
         #endregion

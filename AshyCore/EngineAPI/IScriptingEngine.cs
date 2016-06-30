@@ -18,7 +18,7 @@ namespace AshyCore.EngineAPI
         ITrigger AttachTrigger(IZone zone, Script trigger, IEnumerable<EntitySystem.Entity> entities);
 
         /// <summary>
-        /// Attaches the trigger to the specified <paramref name="zone"/> for only <paramref name="e"/>.
+        /// Attaches the trigger to the specified <paramref name="zone"/> for only one <paramref name="e"/>.
         /// </summary>
         ITrigger AttachTrigger(IZone zone, Script trigger, EntitySystem.Entity e);
     }

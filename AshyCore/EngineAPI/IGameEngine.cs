@@ -8,10 +8,8 @@ namespace AshyCore.EngineAPI
 {
     public interface IGameEngine : IEngine
     {
-        World World { get; }
+        World       World { get; }
 
-        GameLevel Level { get; }
-
-        //void LoadGame(string path);
+        GameLevel   Level { get; }
     }
 }
