@@ -1,6 +1,7 @@
 ﻿using System;
 using AshyCore.Debug;
 using AshyCore.EngineAPI;
+using AshyGame.GameCommands;
 
 namespace AshyGame
 {
@@ -15,6 +16,7 @@ namespace AshyGame
             if (Engine.I == null) 
                 return              ( EngineStatus.CriticalFailed );
 
+            Engine.I.CommandHandler = new GameCommandHandler();
 
             return                  ( EngineStatus.ReadyToLoad );
         }

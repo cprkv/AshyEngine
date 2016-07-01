@@ -120,6 +120,8 @@
     <Compile Include="GameAPI.cs" />
     <Compile Include="EngineAPIProxy.cs" />
     <Compile Include="EngineUser.cs" />
+    <Compile Include="GameCommands\GameCommandHandler.cs" />
+    <Compile Include="GameCommands\LevelCommands.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

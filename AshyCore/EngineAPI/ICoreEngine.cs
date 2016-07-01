@@ -5,6 +5,8 @@
 // This product are licensed under MICROSOFT REFERENCE SOURCE LICENSE(MS-RSL).
 // 
 
+using AshyCore.EngineAPI.EngineCommands;
+
 namespace AshyCore.EngineAPI
 {
     public interface ICoreEngine : IEngine

@@ -15,7 +15,7 @@ namespace AshyCore.EngineAPI.EngineCommands
 
         #region Constructors
 
-        ProxyCommandProcessor(EngineProxy proxy)
+        public ProxyCommandProcessor(EngineProxy proxy)
         {
             Proxy                   = proxy;
             ActiveCommands          = new Queue<IEngineCommand>();
@@ -37,7 +37,7 @@ namespace AshyCore.EngineAPI.EngineCommands
                 return              ( EngineCommandResult.Success );
 
             if (!Proxy.CheckAllInitialized)
-                return              ( EngineCommandResult.CriticalFailed );
+                return              ( EngineCommandResult.Failed );
 
             EngineCommandResult res = EngineCommandResult.Success;
 

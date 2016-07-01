@@ -14,13 +14,13 @@ namespace AshyCore.Resource
     /// </summary>
     public enum ResourceTarget
     {
-        LoadedLevel,
         Engine,
-        World,
         PrivateUI,
         PrivateRender,
         PrivateScript,
         PrivatePhysics,
+        World,
+        LoadedLevel,
         LoadedLevelPrivateUI,
         LoadedLevelPrivateRender,
         LoadedLevelPrivateScript,
@@ -44,7 +44,7 @@ namespace AshyCore.Resource
         /// Resource binding target.
         /// Resource will be released only then released its target.
         /// </summary>
-        ResourceTarget Target { get; }
+        public ResourceTarget Target { get; }
 
         #endregion
 

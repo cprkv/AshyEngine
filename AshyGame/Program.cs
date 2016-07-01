@@ -16,36 +16,36 @@ namespace AshyGame
 {
     internal class EntryPoint
     {
-        private static string[] _args;
+        //private static string[] _args;
 
         private static void UnhandledExceptionFilter(object sender, UnhandledExceptionEventArgs e)
         {
-            EngineFailed(e.ExceptionObject.ToString(), "Unhandled Exception");
+            EngineFailed                        ( e.ExceptionObject.ToString(), "Unhandled Exception" );
         }
 
         static void EngineFailed(string allText, string title)
         {
 #if ! DEBUG
-            MiniDumpWriter.WriteLog();
+            MiniDumpWriter.WriteLog             ();
 #endif
-            MessageBox.Show(
-                allText,
-                title,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error
-                );
+            MessageBox.Show                     (
+                                                    allText,
+                                                    title,
+                                                    MessageBoxButtons.OK,
+                                                    MessageBoxIcon.Error
+                                                );
             Critical.NoThrow(() => 
             {
-                GameAPI.I.Core.Log.Error("--- " + title);
-                GameAPI.I.Core.Log.Error(allText);
-                GameAPI.I.Core.Log.End();
+                GameAPI.I.Core.Log.Error        ( "--- " + title );
+                GameAPI.I.Core.Log.Error        ( allText );
+                GameAPI.I.Core.Log.End          ();
             });
         }
 
         private static void Main(string[] args)
         {
-            _args = args;
-            Debug.ProtectedCall(MainProtected, args);
+           // _args = args;
+            Debug.ProtectedCall                 ( MainProtected, args );
         }
 
         private static void MainProtected(string[] args)
@@ -53,13 +53,22 @@ namespace AshyGame
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionFilter;
 
             if (Application.Preinitialize(args) == EngineStatus.ReadyToLoad)
-                if (Application.Initialize()    == EngineStatus.ReadyToUse)
-                    Application.Execute();
-                else 
-                    EngineFailed("Engine Initialization failed!", "AshyEngine Error");
-            else 
-                EngineFailed("Engine Preinitialization failed!", "AshyEngine Error");
-            Application.Free();
+            {
+                if (Application.Initialize() == EngineStatus.ReadyToUse)
+                {
+                    Application.Execute         ();
+                }
+                else
+                {
+                    EngineFailed                ( "Engine Initialization failed!", "AshyEngine Error" );
+                }                                 
+            }                                     
+            else                                  
+            {                                     
+                EngineFailed                    ( "Engine Preinitialization failed!", "AshyEngine Error" );
+            }                                     
+
+            Application.Free                    ();
         }
     }
 }

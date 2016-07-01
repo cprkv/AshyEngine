@@ -22,7 +22,7 @@ namespace AshyCore.Resource
     {
         #region Properties
 
-        public static string FileExtension = "obj";
+        public static readonly string FileExtension = "obj";
 
         private static CultureInfo _parsingCulture = null;
 

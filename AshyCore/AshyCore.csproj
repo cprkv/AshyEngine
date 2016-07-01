@@ -96,13 +96,15 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="ConfigTable.cs" />
+    <Compile Include="CoreCommands\CoreCommandHandler.cs" />
+    <Compile Include="CoreCommands\LevelCommands.cs" />
     <Compile Include="Debug\Debug.cs" />
     <Compile Include="Debug\MiniDumpWriter.cs" />
     <Compile Include="Debug\Critical.cs" />
     <Compile Include="CoreAPI.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="EngineAPI\EngineCommands\EngineCommandProcessor.cs" />
-    <Compile Include="EngineAPI\EngineCommands\LoadLevel.cs" />
+    <Compile Include="EngineAPI\EngineCommands\LevelCommands.cs" />
     <Compile Include="EngineAPI\EngineProxy.cs" />
     <Compile Include="EngineAPI\EngineCommands\IEngineCommand.cs" />
     <Compile Include="EngineAPI\IGameEngine.cs" />

@@ -58,11 +58,11 @@ namespace AshyGame
             Critical.NoThrow(()         => _user.Core.Log.Error("--- Application shutting down ---"));
             EngineStatus[] status       = new EngineStatus[5];
 
-            status[0] = Proxy.Core      .Free();
+            status[4] = Proxy.Game      .Free();
             status[1] = Proxy.Physics   .Free();
             status[2] = Proxy.Scripting .Free();
             status[3] = Proxy.Render    .Free();
-            status[4] = Proxy.Game      .Free();
+            status[0] = Proxy.Core      .Free();
 
             if (!status.All(s => s == EngineStatus.Free))
             {

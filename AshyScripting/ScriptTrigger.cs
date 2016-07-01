@@ -24,14 +24,14 @@ namespace AshyScripting
     {
         #region Properties
 
-        public Action<Entity> OnInAction  => e => _onInActionLua.Call(e);
-        public Action<Entity> OnOutAction => e => _onOutActionLua.Call(e);
-        public IZone Zone { get; }
+        public Action<Entity>   OnInAction  => e => _onInActionLua.Call(e);
+        public Action<Entity>   OnOutAction => e => _onOutActionLua.Call(e);
+        public IZone            Zone { get; }
 
-        private readonly LuaFunction _onInActionLua;
-        private readonly LuaFunction _onOutActionLua;
-        private readonly IEnumerable<Entity> _entities;
-        private readonly Dictionary<Entity, bool> _inside;
+        private readonly LuaFunction                _onInActionLua;
+        private readonly LuaFunction                _onOutActionLua;
+        private readonly IEnumerable<Entity>        _entities;
+        private readonly Dictionary<Entity, bool>   _inside;
 
         #endregion
 
@@ -40,12 +40,13 @@ namespace AshyScripting
 
         public ScriptTrigger(Lua luaState, IZone zone, Script tringgerScript, IEnumerable<Entity> entities)
         {
-            Zone            = zone;
-            luaState.DoString(tringgerScript.Text);
-            _onInActionLua  = luaState["OnInAction"]  as LuaFunction;
-            _onOutActionLua = luaState["OnOutAction"] as LuaFunction;
-            _entities       = entities;
-            _inside         = _entities.ToDictionary(x => x, zone.IsInside);
+            Zone                    = zone;
+            luaState.DoString       ( tringgerScript.Text );
+            _onInActionLua          = luaState["OnInAction"]  as LuaFunction;
+            _onOutActionLua         = luaState["OnOutAction"] as LuaFunction;
+            _entities               = entities;
+            _inside                 = _entities.ToDictionary(x => x, zone.IsInside);
+
             ScriptingAPI.I.Core.Log.Info($"[Script] Loaded trigger script \"{tringgerScript.Path}.lua\".");
         }
 
@@ -63,13 +64,13 @@ namespace AshyScripting
             {
                 if (!_inside[e] && Zone.IsInside(e))
                 {
-                    OnInAction(e);
-                    _inside[e] = true;
+                    OnInAction      (e);
+                    _inside[e]      = true;
                 }
                 if (_inside[e] && !Zone.IsInside(e))
                 {
-                    OnOutAction(e);
-                    _inside[e] = false;
+                    OnOutAction     (e);
+                    _inside[e]      = false;
                 }
             }
         }
@@ -87,7 +88,7 @@ namespace AshyScripting
         #region Constructors
 
         public PrivateScriptTrigger(Lua luaState, IZone zone, Script tringgerScript, Entity entity)
-            : base(luaState, zone, tringgerScript, new []{ entity })
+            : base( luaState, zone, tringgerScript, new []{ entity } )
         {
         }
 

@@ -1,34 +1,46 @@
-﻿using System;
+﻿using AshyCore.Resource;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AshyCore.EntitySystem;
 
 namespace AshyCore.EngineAPI.EngineCommands
 {
+    #region LoadLevel
+
     public class LoadLevel : IEngineCommand
     {
         public EngineCommandType Type => EngineCommandType.LoadLevel;
 
-        public GameLevel LoadingLevel { get; } 
+        public GameLevel LoadingLevel { get; }
 
         public LoadLevel(string levelName)
         {
-            // LoadingLevel = ... parse or load from world ...
+            var confLevel = Engine.I.RM.Get<ConfigTable>($"Config/Levels/{levelName}", ResourceTarget.World);
+            LoadingLevel = new GameLevel(confLevel);
         }
     }
+
+    #endregion
+
+
+    #region DestroyLevel
 
     public class DestroyLevel : IEngineCommand
     {
         public EngineCommandType Type => EngineCommandType.DestroyLevel;
 
-        public GameLevel DestroyingLevel { get; }
-
         public DestroyLevel()
         {
-            DestroyingLevel = CoreAPI.I.Game.Level;
         }
     }
+
+    #endregion
+
+
+    #region ChangeLevel
 
     public class ChangeLevel : IEngineCommand
     {
@@ -41,7 +53,27 @@ namespace AshyCore.EngineAPI.EngineCommands
         public ChangeLevel(string levelName)
         {
             DestroyingLevel = CoreAPI.I.Game.Level;
-            // LoadingLevel = ... parse or load from world ...
+            var confLevel = Engine.I.RM.Get<ConfigTable>($"Config/Levels/{levelName}", ResourceTarget.World);
+            LoadingLevel = new GameLevel(confLevel);
         }
     }
+
+    #endregion
+
+
+    #region AddEntity
+
+    public class AddEntity : IEngineCommand
+    {
+        public EngineCommandType Type => EngineCommandType.AddEntity;
+
+        public Entity Entity { get; }
+
+        public AddEntity(Entity entity)
+        {
+            Entity = entity;
+        }
+    }
+
+    #endregion
 }

@@ -59,6 +59,8 @@
     <Compile Include="Engine.cs" />
     <Compile Include="PhysicsAPI.cs" />
     <Compile Include="EntityMotionState.cs" />
+    <Compile Include="PhysicsCommands\LevelCommands.cs" />
+    <Compile Include="PhysicsCommands\PhysicsCommandHandler.cs" />
     <Compile Include="PhysicsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

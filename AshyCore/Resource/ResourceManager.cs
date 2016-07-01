@@ -21,11 +21,11 @@ namespace AshyCore.Resource
     {
         #region Private Properties
 
-        private readonly ResorceConstructor[] _resourceConstructors;
+        private readonly ResorceConstructor[]   _resourceConstructors;
 
-        private Dictionary<string, Resource> Resources { get; } = new Dictionary<string, Resource>();
+        private Dictionary<string, Resource>    Resources { get; } = new Dictionary<string, Resource>();
 
-        private VFS.IFileSystem FS { get; }
+        private VFS.IFileSystem                 FS { get; }
 
         #endregion
 
@@ -37,11 +37,11 @@ namespace AshyCore.Resource
             FS = _fs;
             _resourceConstructors = new ResorceConstructor[]
             {
-                (path, target, fs) => new ConfigResource        (path, target, fs),
-                (path, target, fs) => new LuaScriptResource     (path, target, fs),
-                (path, target, fs) => new MeshesResource        (path, target, fs),
-                (path, target, fs) => new TextureJpegResource   (path, target, fs),
-                (path, target, fs) => new TexturePngResource    (path, target, fs)
+                (path, target, fs)  => new ConfigResource        (path, target, fs),
+                (path, target, fs)  => new LuaScriptResource     (path, target, fs),
+                (path, target, fs)  => new MeshesResource        (path, target, fs),
+                (path, target, fs)  => new TextureJpegResource   (path, target, fs),
+                (path, target, fs)  => new TexturePngResource    (path, target, fs)
             };
         }
 
@@ -62,15 +62,15 @@ namespace AshyCore.Resource
             get
             {
                 if (Resources.ContainsKey(path))
-                    return      ( Resources[path].RC );
+                    return          ( Resources[path].RC );
 
-                var resource    = CreateResourceInstance(path, target);
+                var resource        = CreateResourceInstance(path, target);
                 if (resource == null)
-                    throw       new ArgumentException($"Error during load resorce by path: \"{path}\".");
+                    throw           new ArgumentException($"Error during load resorce by path: \"{path}\".");
 
-                Resources.Add   (path, resource);
+                Resources.Add       (path, resource);
 
-                return          ( resource.RC );
+                return              ( resource.RC );
             }
         }
 
@@ -82,7 +82,7 @@ namespace AshyCore.Resource
         /// <typeparam name="TData">The type of the data to return (just static cast).</typeparam>
         public TData Get<TData>(string path, ResourceTarget target)
         {
-            return (TData) this[path, target];
+            return                          ( (TData) this[path, target] );
         }
 
         /// <summary>
@@ -91,11 +91,15 @@ namespace AshyCore.Resource
         /// <param name="pred">
         /// <code>true</code> when resource should be freed.
         /// </param>
-        public int CollectWaiting(Func<ResourceType, bool> pred)
+        public int CollectWaiting(Func<ResourceTarget, bool> pred)
         {
-            var targets                     = Resources.Select(x => new WeakReference(x.Value.RC)).ToList();
-            CollectWithoutWaiting           (pred);
-            Debug.Critical.CollectMemory    (false);
+            var targets                     = Resources
+                .Where                      ( rc => pred(rc.Value.Target) )
+                .Select                     ( x => new WeakReference(x.Value.RC) )
+                .ToList                     ();
+
+            CollectWithoutWaiting           ( pred );
+            Debug.Critical.CollectMemory    ( false );
 
             return                          ( targets.Count(x => x.IsAlive) );
         }
@@ -103,11 +107,11 @@ namespace AshyCore.Resource
         /// <param name="pred">
         /// <code>true</code> when resource should be freed.
         /// </param>
-        public void CollectWithoutWaiting(Func<ResourceType, bool> pred)
+        public void CollectWithoutWaiting(Func<ResourceTarget, bool> pred)
         {
-            foreach (var resource in Resources)
+            foreach (var resource in Resources.Where(rc => pred(rc.Value.Target)))
             {
-                Resources.Remove(resource.Key);
+                Resources.Remove            ( resource.Key );
             }
         }
 
@@ -120,16 +124,15 @@ namespace AshyCore.Resource
             {
                 try
                 {
-                    var result = resource(path, target, FS);
-                    return result;
+                    var result              = resource(path, target, FS);
+                    return                  ( result );
                 }
                 catch
                 {
                     // ignored
                 }
             }
-            
-            return null;
+            return                          ( null );
         }
 
         #endregion

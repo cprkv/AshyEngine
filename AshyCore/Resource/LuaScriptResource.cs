@@ -18,7 +18,7 @@ namespace AshyCore.Resource
     {
         #region Propteries
 
-        public static string FileExtension = "lua";
+        public static readonly string FileExtension = "lua";
 
         #endregion
 

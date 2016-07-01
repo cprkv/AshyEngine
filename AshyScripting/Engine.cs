@@ -5,6 +5,7 @@ using AshyCore.EntityManagement;
 using AshyCore.EntitySystem;
 using NLua;
 using AshyCommon;
+using AshyCore.EngineAPI.EngineCommands;
 
 namespace AshyScripting
 {
@@ -20,12 +21,36 @@ namespace AshyScripting
 
         internal List<ScriptTrigger>                Triggers { get; set; }
 
+        internal void CreateWorld()
+        {
+            LuaState                    = new Lua();
+            Triggers                    = new List<ScriptTrigger>();
+            UpdateFunctions             = new Dictionary<Entity, LuaFunction>();
+
+            LuaState.LoadCLRPackage     ();
+            LuaState.DoString(                                     
+                @" import               ('AshyCommon', 'AshyCommon.Math')
+                   import               ('AshyCore',   'AshyCore')
+                   import               ('AshyCore',   'AshyCore.Entity')"
+                );
+        }
+
+        internal void DestroyWorld()
+        {
+            UpdateFunctions             = null;
+            Triggers                    = null;
+            LuaState?.Dispose           ();
+            LuaState                    = null;
+        }
+
         #endregion
 
 
         #region IScriptingEngine
 
         public EngineStatus             Status { get; internal set; }
+
+        public IEngineCommandHandler    CommandHandler { get; internal set; }
 
         public ITrigger AttachTrigger(IZone zone, Script trigger, Entity e)
         {

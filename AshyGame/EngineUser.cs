@@ -6,6 +6,7 @@
 // 
 
 using AshyCore.EngineAPI;
+using AshyCore.EngineAPI.EngineCommands;
 
 namespace AshyGame
 {
@@ -18,6 +19,7 @@ namespace AshyGame
             Script      = new AshyScripting .Engine();
             Physics     = new AshyPhysics   .Engine();
             Game        = new AshyGame      .Engine();
+            CommandProcessor = new ProxyCommandProcessor(this);
 
             CmdArgs     = cmdArgs;
             UserName    = cmdArgs.Length > 0 ? cmdArgs[0] : "UserDefault";
@@ -25,6 +27,7 @@ namespace AshyGame
 
         public void Tick(float dtime)
         {
+            CommandProcessor.ProcessAllCommands();
             Core    .Tick(dtime);
             Physics .Tick(dtime);
             Script  .Tick(dtime);

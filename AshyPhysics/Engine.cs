@@ -11,6 +11,7 @@ using AshyCore.EntitySystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using AshyCore;
+using AshyCore.EngineAPI.EngineCommands;
 using BulletSharp;
 using BulletSharp.Math;
 
@@ -23,9 +24,9 @@ namespace AshyPhysics
         internal static Engine                      I { get; set; }
 
         internal DiscreteDynamicsWorld              World { get; set; }
-
+        
         internal BroadphaseInterface                BroadPhase { get; set; }
-
+        
         internal DefaultCollisionConfiguration      Collisions { get; set; }
 
         internal CollisionDispatcher                Dispatcher { get; set; }
@@ -41,7 +42,9 @@ namespace AshyPhysics
 
         #region Implementation of IPhysicsEngine
 
-        public EngineStatus         Status { get; set; }
+        public EngineStatus                         Status { get; set; }
+
+        public IEngineCommandHandler                CommandHandler { get; internal set; }
 
         public ICharacterPhysics RegisterCharacter(Entity e)
         {
@@ -55,7 +58,36 @@ namespace AshyPhysics
         public void Tick(float dtime)
         {
             World.StepSimulation    ( dtime, maxSubSteps: 30 );
-        } 
+        }
+
+        internal void DestroyWorld()
+        {
+            CollisionShapes         = null;
+            BroadPhase              = null;
+            Collisions              = null;
+            Dispatcher              = null;
+            Solver                  = null;
+            Objects                 = null;
+            World                   = null;
+        }
+
+        internal void CreateWorld()
+        {
+            CollisionShapes         = new List<CollisionShape>();
+            BroadPhase              = new DbvtBroadphase();
+            Collisions              = new DefaultCollisionConfiguration();
+            Dispatcher              = new CollisionDispatcher(Collisions);
+            Solver                  = new SequentialImpulseConstraintSolver();
+            Objects                 = new Dictionary<Entity, RigidBody>();
+
+            World                   = new DiscreteDynamicsWorld(Dispatcher, 
+                                                                BroadPhase, 
+                                                                Solver, 
+                                                                Collisions)
+            {
+                Gravity             = new Vector3(0.0f, -9.8f, 0.0f)
+            };
+        }
 
         #endregion
     }

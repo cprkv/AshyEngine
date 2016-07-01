@@ -24,6 +24,8 @@ namespace AshyCore
             Engine.I                    = baseEngine.Core as Engine;
             if (Engine.I == null) 
                 return                  ( EngineStatus.CriticalFailed );
+
+            Engine.I.CommandHandler     = new CoreCommands.CoreCommandHandler();
                 
             return                      ( EngineStatus.ReadyToLoad );
         }
@@ -61,7 +63,7 @@ namespace AshyCore
             }
             catch (Exception e)
             {
-                //Critical.NoThrow(() => I.Core.Log.Error("AshyCore Preinitialization failed!", e));
+                //Critical.NoThrow(() => I.Core.Log.Error("AshyCore Initialization failed!", e));
                 return                  ( EngineStatus.CriticalFailed );
             }
 #endif

@@ -5,10 +5,12 @@
 // This product are licensed under MICROSOFT REFERENCE SOURCE LICENSE(MS-RSL).
 // 
 
+using System;
 using System.Collections.Generic;
 
 namespace AshyCore
 {
+    [Obsolete("We will use it later", true)]
     public class World
     {
         #region Properties

@@ -37,10 +37,10 @@ namespace AshyCore
 
         #region Constructors
 
-        public GameLevel(string name, ConfigTable levelInfo)
+        public GameLevel(ConfigTable levelInfo)
         {
-            Name = name;
-            LevelInfo = levelInfo;
+            Name                        = levelInfo["LevelProperties", "Name"];
+            LevelInfo                   = levelInfo;
         }
 
         #endregion
@@ -50,43 +50,42 @@ namespace AshyCore
 
         public void Load()
         {
-            Entities = LevelInfo["Entities"]
-                .Select(key => key.Key)
-                .Select(LoadEntity)
-                .ToList();
-            Player = LoadPlayer();
-            Entities.Add(Player);
-            LoadZones();
-            LoadTriggers();
-            CoreAPI.I.Core.Log.Info($"[Engine] Level {Name} loaded.");
+            Entities                    = LevelInfo["Entities"]
+                .Select                 ( key => key.Key )
+                .Select                 ( LoadEntity )
+                .ToList                 ();
+
+            Player                      = LoadPlayer();
+            Entities.Add                ( Player );
+            LoadZones                   ();
+            LoadTriggers                ();
+            CoreAPI.I.Core.Log.Info     ( $"[Engine] Level {Name} loaded." );
         }
 
-        public async void LoadInModulesAsync()
+        public void LoadInModules()
         {
-            await Task.Run(() =>
-            {
-                //CoreAPI.Instance.Modules.ForEach(m => m.LoadLevel(this)); !!
-            });
+            //CoreAPI.Instance.Modules.ForEach(m => m.LoadLevel(this)); !!
         }
 
         public IEnumerable<Entity> GetEntities(ComponentType type)
         {
-            return Entities.Where(entity => entity.HasComponent(type));
+            return                      ( Entities.Where(entity => entity.HasComponent(type)) );
         }
 
         public IEnumerable<Entity> GetEntities(IEnumerable<string> names)
         {
-            return Entities.Where(entity => names.Contains(entity.Name));
+            return                      ( Entities.Where(entity => names.Contains(entity.Name)) );
         }
 
         public Entity GetEntity(string name)
         {
-            return Entities.FirstOrDefault(x => x.Name == name);
+            return                      ( Entities.FirstOrDefault(x => x.Name == name) );
         }
 
         public void Spawn(Entity entity)
         {
-            Entities.Add(entity);
+            Entities.Add                ( entity );
+            //CoreAPI.I.CommandProcessor.AddCommand()
             //CoreAPI.Instance.Modules.ForEach(m => m.RegisterEntity(entity)); !!
         }
 
@@ -100,43 +99,44 @@ namespace AshyCore
         private Player LoadPlayer()
         {
             var e = new Player(
-                ReadVec3("Player", "Position"),
-                ReadVec3("Player", "Scale"),
-                ReadVec3("Player", "Rotation")
+                ReadVec3                ( "Player", "Position" ),
+                ReadVec3                ( "Player", "Scale" ),
+                ReadVec3                ( "Player", "Rotation" )
                 );
             return e;
         }
 
+            // todo move to parser
         private Entity LoadEntity(string entityName)
         {
-            // todo move to parser
             var e = new Entity(
                 entityName,
-                ReadVec3(entityName, "Position"),
-                ReadVec3(entityName, "Scale"),
-                ReadVec3(entityName, "Rotation")
+                ReadVec3                (entityName, "Position"),
+                ReadVec3                (entityName, "Scale"),
+                ReadVec3                (entityName, "Rotation")
                 );
-            string scriptComponent  = LevelInfo[e.Name, "ScriptComponent"];
-            string renderComponent  = LevelInfo[e.Name, "RenderComponent"];
-            string geomComponent    = LevelInfo[e.Name, "GeomComponent"];
-            string physicsComponent = LevelInfo[e.Name, "PhysicsComponent"];
+            string scriptComponent      = LevelInfo[e.Name, "ScriptComponent"];
+            string renderComponent      = LevelInfo[e.Name, "RenderComponent"];
+            string geomComponent        = LevelInfo[e.Name, "GeomComponent"];
+            string physicsComponent     = LevelInfo[e.Name, "PhysicsComponent"];
 
             if (scriptComponent != null)
             {
-                e.AddComponent(new ScriptComponent(LevelInfo[scriptComponent, "ScriptPath"]));
+                e.AddComponent          ( new ScriptComponent(LevelInfo[scriptComponent, "ScriptPath"]) );
             }
             if (geomComponent != null)
             {
-                var mesh = CoreAPI.I.Core.RM.Get<Mesh>(
-                    $"Meshes/{LevelInfo[geomComponent, "Mesh"]}", 
-                    Resource.ResourceTarget.LoadedLevel
+                var mesh = CoreAPI.I.Core.RM.Get<Mesh>
+                    (
+                        $"Meshes/{LevelInfo[geomComponent, "Mesh"]}", 
+                        Resource.ResourceTarget.LoadedLevel
                     );
-                e.AddComponent(new GeomComponent(mesh));
+                e.AddComponent          ( new GeomComponent(mesh) );
 
                 if (renderComponent != null)
                 {
                     e.AddComponent(new RenderComponent(mesh, new Material(
-                        ReadVec3(renderComponent,  "Color"),
+                        ReadVec3( renderComponent,  "Color" ),
                         LevelInfo[renderComponent, "Shader"],
                         LevelInfo[renderComponent, "Diffuse"],
                         LevelInfo[renderComponent, "Normal"])));
@@ -148,31 +148,31 @@ namespace AshyCore
                         LevelInfo[physicsComponent, "MotionType"].AsEnum<MotionType>()));
                 }
             }
-            return e;
+            return                      ( e );
         }
 
+            // todo move to game
         private void LoadZones()
         {
-            // todo move to game
             Zones = LevelInfo["Zones"].ToDictionary(x => x.Key, x =>
             {
                 IZone zone;
                 if (x.Value == "Spherical")
                 {
-                    zone = new SphericalZone(ReadVec3(x.Key, "Center"), LevelInfo[x.Key, "Radius"].AsFloat().Value);
+                    zone                = new SphericalZone(ReadVec3(x.Key, "Center"), LevelInfo[x.Key, "Radius"].AsFloat().Value);
                 }
                 else
                 {
-                    var aab = ReadVec3(x.Key, "AAB");
-                    zone = new AABZone(ReadVec3(x.Key, "Center"), aab.X, aab.Z, aab.Z);
+                    var aab             = ReadVec3(x.Key, "AAB");
+                    zone                = new AABZone(ReadVec3(x.Key, "Center"), aab.X, aab.Z, aab.Z);
                 }
-                return zone;
+                return                  ( zone );
             });
         }
 
+            // todo move to game
         private void LoadTriggers()
         {
-            // todo move to game
             Triggers = LevelInfo["Triggers"].ToDictionary(x => x.Key, x =>
                 CoreAPI.I.Script.AttachTrigger(
                     Zones[LevelInfo[x.Key, "Zone"]],

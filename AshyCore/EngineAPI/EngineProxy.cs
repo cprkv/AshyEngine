@@ -8,24 +8,27 @@
 using System;
 using AshyCore.Resource;
 using AshyCore.VFS;
+using AshyCore.EngineAPI.EngineCommands;
 
 namespace AshyCore.EngineAPI
 {
     public abstract class EngineProxy
     {
-        public ICoreEngine      Core { get; protected set; }
+        public ICoreEngine          Core { get; protected set; }
 
-        public IRenderEngine    Render { get; protected set; }
+        public IRenderEngine        Render { get; protected set; }
 
-        public IScriptingEngine Script { get; protected set; }
+        public IScriptingEngine     Script { get; protected set; }
 
-        public IPhysicsEngine   Physics { get; protected set; }
+        public IPhysicsEngine       Physics { get; protected set; }
 
-        public IGameEngine      Game { get; protected set; }
+        public IGameEngine          Game { get; protected set; }
 
-        public string[]         CmdArgs { get; protected set; }
+        public ProxyCommandProcessor CommandProcessor { get; protected set; }
 
-        public string           UserName { get; protected set; }
+        public string[]             CmdArgs { get; protected set; }
+
+        public string               UserName { get; protected set; }
 
         public bool CheckAllPreinitialized =>
             Core    .Status >= EngineStatus.ReadyToLoad &&

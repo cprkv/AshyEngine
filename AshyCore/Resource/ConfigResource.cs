@@ -20,9 +20,9 @@ namespace AshyCore.Resource
     {
         #region Fields
 
-        public static string FileExtension = "ini";
+        public static readonly string FileExtension = "ini";
 
-        private static IniDataParser Parser = new IniDataParser();
+        internal static readonly IniDataParser Parser = new IniDataParser();
 
         #endregion
 
