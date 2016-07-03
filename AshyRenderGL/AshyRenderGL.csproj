@@ -99,13 +99,22 @@
     <Compile Include="Engine.cs" />
     <Compile Include="RenderAPI.cs" />
     <Compile Include="Particle.cs" />
+    <Compile Include="RenderCommands\LevelCommands.cs" />
+    <Compile Include="RenderCommands\RenderCommandHandler.cs" />
+    <Compile Include="Techniques\GL4\DiffuseStage.cs" />
+    <Compile Include="Techniques\GL4\GL4Technique.cs" />
+    <Compile Include="Techniques\GL4\ParticleStage.cs" />
+    <Compile Include="Techniques\GL4\SkyboxStage.cs" />
+    <Compile Include="Techniques\RenderTechnique.cs" />
     <Compile Include="RenderTexture.cs" />
     <Compile Include="Render.cs" />
     <Compile Include="RenderModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scene.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="ShaderProgram.cs" />
     <Compile Include="Skybox.cs" />
+    <Compile Include="Techniques\Stage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AshyCommon\AshyCommon.csproj">
@@ -124,6 +133,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,37 +1,17 @@
-﻿using AshyCore.EngineAPI.EngineCommands;
+﻿using System.Collections.Generic;
+using AshyCore.EngineAPI.EngineCommands;
 
 namespace AshyCore.CoreCommands
 {
-    internal class CoreCommandHandler : IEngineCommandHandler
+    internal class CoreCommandHandler : EngineCommandHandlerBase
     {
-        public EngineCommandResult Execute(IEngineCommand c)
+        public CoreCommandHandler()
         {
-            EngineCommandResult result;
-            switch ( c.Type )
+            Executers = new Dictionary<EngineCommandType, IEngineCommandHandler>()
             {
-                case EngineCommandType.LoadLevel:
-                    result      = LoadLevel.Process();
-                    break;
-
-                case EngineCommandType.DestroyLevel:
-                    result      = DestroyLevel.Process();
-                    break;
-
-                case EngineCommandType.ChangeLevel:
-                    result      = ChangeLevel.Process();
-                    break;
-
-                // nothing to do
-                case EngineCommandType.AddEntity:
-                case EngineCommandType.OpenConsole:
-                case EngineCommandType.CloseConsole:
-                case EngineCommandType.PauseGame:
-                default:
-                    result      = EngineCommandResult.Success;
-                    break;
-            }
-
-            return              ( result );
+                { EngineCommandType.LoadLevel,      new LoadLevel() },
+                { EngineCommandType.DestroyLevel,   new DestroyLevel() },
+            };
         }
     }
 }

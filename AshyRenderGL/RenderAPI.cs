@@ -1,5 +1,6 @@
 ﻿using System;
 using AshyCore.EngineAPI;
+using AshyRenderGL.RenderCommands;
 
 namespace AshyRenderGL
 {
@@ -14,6 +15,7 @@ namespace AshyRenderGL
             if (Engine.I == null) 
                 return                  ( EngineStatus.CriticalFailed );
 
+            Engine.I.CommandHandler     = new RenderCommandHandler();
 
             return                      ( EngineStatus.ReadyToLoad );
         }
@@ -22,6 +24,7 @@ namespace AshyRenderGL
         {
             throw new NotImplementedException();
         }
+
         public EngineStatus Free()
         {
             Engine.I                    = null;

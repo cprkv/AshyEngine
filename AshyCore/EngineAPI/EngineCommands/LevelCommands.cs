@@ -12,14 +12,14 @@ namespace AshyCore.EngineAPI.EngineCommands
 
     public class LoadLevel : IEngineCommand
     {
-        public EngineCommandType Type => EngineCommandType.LoadLevel;
+        public EngineCommandType    Type => EngineCommandType.LoadLevel;
 
-        public GameLevel LoadingLevel { get; }
+        public GameLevel            LoadingLevel { get; }
 
         public LoadLevel(string levelName)
         {
-            var confLevel = Engine.I.RM.Get<ConfigTable>($"Config/Levels/{levelName}", ResourceTarget.World);
-            LoadingLevel = new GameLevel(confLevel);
+            var confLevel           = Engine.I.RM.Get<ConfigTable>($"Config/Levels/{levelName}", ResourceTarget.World);
+            LoadingLevel            = new GameLevel(confLevel);
         }
     }
 
@@ -30,7 +30,7 @@ namespace AshyCore.EngineAPI.EngineCommands
 
     public class DestroyLevel : IEngineCommand
     {
-        public EngineCommandType Type => EngineCommandType.DestroyLevel;
+        public EngineCommandType    Type => EngineCommandType.DestroyLevel;
 
         public DestroyLevel()
         {
@@ -44,17 +44,17 @@ namespace AshyCore.EngineAPI.EngineCommands
 
     public class ChangeLevel : IEngineCommand
     {
-        public EngineCommandType Type => EngineCommandType.ChangeLevel;
+        public EngineCommandType    Type => EngineCommandType.ChangeLevel;
 
-        public GameLevel LoadingLevel { get; }
+        public GameLevel            LoadingLevel { get; }
 
-        public GameLevel DestroyingLevel { get; }
+        public GameLevel            DestroyingLevel { get; }
 
         public ChangeLevel(string levelName)
         {
-            DestroyingLevel = CoreAPI.I.Game.Level;
-            var confLevel = Engine.I.RM.Get<ConfigTable>($"Config/Levels/{levelName}", ResourceTarget.World);
-            LoadingLevel = new GameLevel(confLevel);
+            DestroyingLevel         = CoreAPI.I.Game.Level;
+            var confLevel           = Engine.I.RM.Get<ConfigTable>($"Config/Levels/{levelName}", ResourceTarget.World);
+            LoadingLevel            = new GameLevel(confLevel);
         }
     }
 
@@ -65,13 +65,13 @@ namespace AshyCore.EngineAPI.EngineCommands
 
     public class AddEntity : IEngineCommand
     {
-        public EngineCommandType Type => EngineCommandType.AddEntity;
+        public EngineCommandType    Type => EngineCommandType.AddEntity;
 
-        public Entity Entity { get; }
+        public Entity               Entity { get; }
 
         public AddEntity(Entity entity)
         {
-            Entity = entity;
+            Entity                  = entity;
         }
     }
 

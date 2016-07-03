@@ -22,8 +22,9 @@ namespace AshyCore.EntitySystem
         /// <summary>
         /// Manually sets the force vector of connected entity.
         /// </summary>
-        /// <param name="a">Force vector.</param>
-        void SetForce(Vec3 a);
+        /// <param name="force">Force vector. Should not be zero.</param>
+        /// <param name="movingSpeed">Moving factor.</param>
+        void SetForce(Vec3 force, int movingSpeed);
 
         /// <summary>
         /// Manually stops the force of connected entity.

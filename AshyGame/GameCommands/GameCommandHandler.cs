@@ -5,43 +5,21 @@
 // This product are licensed under MICROSOFT REFERENCE SOURCE LICENSE(MS-RSL).
 //  
 
+using System.Collections.Generic;
 using AshyCore.EngineAPI.EngineCommands;
 
 namespace AshyGame.GameCommands
 {
-    internal class GameCommandHandler : IEngineCommandHandler
+    internal class GameCommandHandler : EngineCommandHandlerBase
     {
-        public EngineCommandResult Execute(IEngineCommand c)
+        public GameCommandHandler()
         {
-            EngineCommandResult result;
-            switch ( c.Type )
+            Executers = new Dictionary<EngineCommandType, IEngineCommandHandler>()
             {
-                case EngineCommandType.LoadLevel:
-                    result      = LoadLevel.Process(c as AshyCore.EngineAPI.EngineCommands.LoadLevel);
-                    break;
-
-                case EngineCommandType.DestroyLevel:
-                    result      = DestroyLevel.Process();
-                    break;
-
-                case EngineCommandType.ChangeLevel:
-                    result      = ChangeLevel.Process(c as AshyCore.EngineAPI.EngineCommands.ChangeLevel);
-                    break;
-
-                case EngineCommandType.AddEntity:
-                    result      = AddEntity.Process(c as AshyCore.EngineAPI.EngineCommands.AddEntity);
-                    break;
-
-                // nothing to do
-                case EngineCommandType.OpenConsole:
-                case EngineCommandType.CloseConsole:
-                case EngineCommandType.PauseGame:
-                default:
-                    result      = EngineCommandResult.Success;
-                    break;
-            }
-
-            return              ( result );
+                { EngineCommandType.LoadLevel,      new LoadLevel() },
+                { EngineCommandType.AddEntity,      new AddEntity() },
+                { EngineCommandType.DestroyLevel,   new DestroyLevel() },
+            };
         }
     }
 }

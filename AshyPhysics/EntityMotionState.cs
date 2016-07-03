@@ -13,9 +13,18 @@ namespace AshyPhysics
 {
     public class EntityMotionState : BulletSharp.MotionState
     {
-        private Entity Entity { get; }
-        private TransformBase _transform;
-        public TransformBase Transform  => _transform;
+        #region Properties
+
+        private Entity                  Entity { get; }
+
+        public TransformBase            Transform => _transform;
+
+        private TransformBase           _transform;
+
+        #endregion
+
+
+        #region Constructors
 
         public EntityMotionState(Entity entity, bool isKinematic)
         {
@@ -23,9 +32,14 @@ namespace AshyPhysics
             _transform                  = entity.Transform;
             if (isKinematic)
             {
-                Entity.TransformEvent  += (o, tr) => _transform = tr;
+                Entity.TransformEvent   += (o, tr) => _transform = tr;
             }
         }
+
+        #endregion
+
+
+        #region Methods
 
         public override void GetWorldTransform(out Matrix worldTrans)
         {
@@ -44,6 +58,6 @@ namespace AshyPhysics
             Entity.ForceSetTransform    ( Transform );
         }
 
-
+        #endregion
     }
 }

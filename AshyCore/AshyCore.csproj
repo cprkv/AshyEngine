@@ -99,11 +99,13 @@
     <Compile Include="CoreCommands\CoreCommandHandler.cs" />
     <Compile Include="CoreCommands\LevelCommands.cs" />
     <Compile Include="Debug\Debug.cs" />
-    <Compile Include="Debug\MiniDumpWriter.cs" />
+    <Compile Include="Debug\Memory.cs" />
+    <Compile Include="Debug\MiniDump.cs" />
     <Compile Include="Debug\Critical.cs" />
     <Compile Include="CoreAPI.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="EngineAPI\EngineCommands\EngineCommandProcessor.cs" />
+    <Compile Include="EngineAPI\EngineCommands\EngineCommandHandler.cs" />
+    <Compile Include="EngineAPI\EngineCommands\ProxyCommandProcessor.cs" />
     <Compile Include="EngineAPI\EngineCommands\LevelCommands.cs" />
     <Compile Include="EngineAPI\EngineProxy.cs" />
     <Compile Include="EngineAPI\EngineCommands\IEngineCommand.cs" />

@@ -25,20 +25,12 @@ namespace AshyScripting
 
         public EngineStatus Initialize()
         {
-          //I.Core.Log.Info             ("--- Scripting Initialization ---");
-
-          //Engine.I.CreateWorld        ();
-
-          //I.Core.Log.Info             ("Scripting Initialization successful");
             return                      ( EngineStatus.ReadyToLoad );
         }
 
         public EngineStatus Free()
         {
-            Engine.I.UpdateFunctions    = null;
-            Engine.I.Triggers           = null;
-            Engine.I.LuaState?.Dispose  ();
-            Engine.I.LuaState           = null;
+            Engine.I?.DestroyWorld      ();
             Engine.I                    = null;
             I                           = null;
 

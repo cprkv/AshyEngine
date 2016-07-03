@@ -67,8 +67,8 @@ namespace AshyGame
             if (!status.All(s => s == EngineStatus.Free))
             {
                 Critical.NoThrow(()     => GameAPI.I.Core.Log.Info("[Application] Free unsuccessful."));
-                Critical.NoThrow(()     => Critical.CollectMemory(false));
             }
+            Critical.NoThrow(()         => Memory.Collect(false));
             Critical.NoThrow(()         => GameAPI.I.Core.Log.Info("[Application] Free successful."));
         }
     }

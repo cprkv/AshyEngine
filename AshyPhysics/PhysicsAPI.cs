@@ -24,7 +24,6 @@ namespace AshyPhysics
 
         public EngineStatus Initialize()
         {
-            //Engine.I.CreateWorld        (); //< this makes throug one command
             return                      ( EngineStatus.ReadyToUse );
         }
 

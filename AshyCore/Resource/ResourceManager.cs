@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
+using AshyCore.Debug;
 
 namespace AshyCore.Resource
 {
@@ -99,7 +100,7 @@ namespace AshyCore.Resource
                 .ToList                     ();
 
             CollectWithoutWaiting           ( pred );
-            Debug.Critical.CollectMemory    ( false );
+            Memory.Collect    ( false );
 
             return                          ( targets.Count(x => x.IsAlive) );
         }

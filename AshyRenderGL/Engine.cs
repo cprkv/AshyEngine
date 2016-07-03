@@ -1,5 +1,6 @@
 ﻿using System;
 using AshyCore.EngineAPI;
+using AshyCore.EngineAPI.EngineCommands;
 
 namespace AshyRenderGL
 {
@@ -7,7 +8,9 @@ namespace AshyRenderGL
     {
         internal static Engine I { get; set; }
 
-        public EngineStatus Status { get; set; }
+        public IEngineCommandHandler    CommandHandler { get; internal set; }
+
+        public EngineStatus             Status { get; internal set; }
 
         public void Tick(float dtime)
         {

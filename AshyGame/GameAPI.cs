@@ -23,7 +23,7 @@ namespace AshyGame
 
         public EngineStatus Initialize()
         {
-            throw new NotImplementedException();
+            return                  ( EngineStatus.ReadyToUse );
         }
 
         public EngineStatus Free()

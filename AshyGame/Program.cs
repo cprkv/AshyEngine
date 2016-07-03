@@ -26,7 +26,7 @@ namespace AshyGame
         static void EngineFailed(string allText, string title)
         {
 #if ! DEBUG
-            MiniDumpWriter.WriteLog             ();
+            MiniDump.Write             ();
 #endif
             MessageBox.Show                     (
                                                     allText,

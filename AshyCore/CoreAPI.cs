@@ -73,6 +73,8 @@ namespace AshyCore
 
         public EngineStatus Free()
         {
+            Critical.NoThrow            ( () => Engine.I.FS.Dispose() );
+            Critical.NoThrow            ( () => Engine.I.Log.End() );               // todo: check this
             int collectWaiting          = I.Core.RM.CollectWaiting(x => true);
             return                      collectWaiting == 0 
                                             ? ( EngineStatus.Free )

@@ -19,7 +19,8 @@ namespace AshyGame
 
         public void Tick(float dtime)
         {
-            throw new NotImplementedException();
+            // empty
+            // todo: realize what to do here
         }
     }
 }

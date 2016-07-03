@@ -1,43 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using AshyCore;
+using AshyCore.Debug;
 using AshyCore.EngineAPI;
 using AshyCore.EngineAPI.EngineCommands;
 
 namespace AshyCore.CoreCommands
 {
-    internal static class LoadLevel
+    #region Helper
+
+    internal static class LevelCommandsHelper
     {
         /// <summary>
         /// Just collects unused resources.
         /// </summary>
-        internal static EngineCommandResult Process()
+        internal static EngineCommandResult CollectResources()
         {
-            if ( ! CoreAPI.I.CheckAllInitialized )
-                return                          ( EngineCommandResult.Failed );
-
-            int uncollected                     = Engine.I.RM.CollectWaiting(rtype => rtype >= Resource.ResourceTarget.LoadedLevel);
+            int uncollected         = Engine.I.RM.CollectWaiting(rtype => rtype >= Resource.ResourceTarget.LoadedLevel);
             if (uncollected != 0)
-                Debug.Critical.CollectMemory    ( showLog: true );
+                Memory.Collect      ( showLog: true );
 
-            return                              ( EngineCommandResult.Success );
+            return                  ( EngineCommandResult.Success );
         }
     }
 
-    internal static class DestroyLevel
+    #endregion
+
+
+    internal class LoadLevel : IEngineCommandHandler
     {
-        internal static EngineCommandResult Process()
+        public EngineCommandResult Execute(IEngineCommand c)
         {
-            return                              ( LoadLevel.Process() );        // the same - just collect unused memory
+            return                  ( LevelCommandsHelper.CollectResources() );
         }
     }
-
-    internal static class ChangeLevel
+    
+    internal class DestroyLevel : IEngineCommandHandler
     {
-        internal static EngineCommandResult Process()
+        public EngineCommandResult Execute(IEngineCommand c)
         {
-            return                              ( LoadLevel.Process() );        // the same - just collect unused memory
+            return                  ( LevelCommandsHelper.CollectResources() );
         }
     }
-
+    
+    internal class ChangeLevel : IEngineCommandHandler
+    {
+        public EngineCommandResult Execute(IEngineCommand c)
+        {
+            return                  ( LevelCommandsHelper.CollectResources() );
+        }
+    }
 }
