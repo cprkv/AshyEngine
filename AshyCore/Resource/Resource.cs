@@ -28,7 +28,7 @@ namespace AshyCore.Resource
     }
 
     /// <summary>
-    /// Represents resource, which you can load from <see cref="AshyCore.VFS.IFileSystem"/>.
+    /// Represents resource, which you can load from <see cref="VFS.IFileSystem"/>.
     /// Manages loading (parsing), unloading file.
     /// </summary>
     public abstract class Resource : IDisposable

@@ -1,6 +1,8 @@
 ﻿using System;
+using AshyCore;
 using AshyCore.EngineAPI;
 using AshyCore.EngineAPI.EngineCommands;
+using AshyRenderGL.Techniques;
 
 namespace AshyRenderGL
 {
@@ -12,9 +14,14 @@ namespace AshyRenderGL
 
         public EngineStatus             Status { get; internal set; }
 
+        public IWindow                  GameWindow { get; internal set; }
+
+        public RenderTechnique          RenderTechnique { get; internal set; }
+
         public void Tick(float dtime)
         {
             throw new NotImplementedException();
         }
+
     }
 }

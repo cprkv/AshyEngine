@@ -37,10 +37,10 @@ namespace AshyRenderGL
 
         public ShaderProgram(Dictionary<string, string> uniformTypes, params Shader[] shaders)
         {
-            ProgramId       = GL.CreateProgram();
-            UniformTypes    = uniformTypes;
-            Shaders         = shaders;
-            CanBeUsed       = false;
+            ProgramId               = GL.CreateProgram();
+            UniformTypes            = uniformTypes;
+            Shaders                 = shaders;
+            CanBeUsed               = false;
         }
 
         #endregion
@@ -50,48 +50,50 @@ namespace AshyRenderGL
 
         public void Use()
         {
-            if (!CanBeUsed) return;
-            GL.UseProgram(ProgramId);
+            if (!CanBeUsed)
+                return;
+            GL.UseProgram           ( ProgramId );
         }
 
         public ShaderProgram Compile()
         {
             Shaders.ForEach(s =>
-            {
-                GL.ShaderSource(s.Id, s.Source);
-                GL.CompileShader(s.Id);
-                GL.AttachShader(ProgramId, s.Id);
-                VerifyShaderStep(s.Id);
-                GL.DeleteShader(s.Id);
-                VerifyProgramStep();
+            {                         
+                GL.ShaderSource     ( s.Id, s.Source );
+                GL.CompileShader    ( s.Id );
+                GL.AttachShader     ( ProgramId, s.Id );
+                VerifyShaderStep    ( s.Id );
+                GL.DeleteShader     ( s.Id );
+                VerifyProgramStep   ();
             });
-            GL.LinkProgram(ProgramId);
-            VerifyProgramStep();
-            CanBeUsed = true;
-            UniformLocation = UniformTypes.ToDictionary(u => u.Key, u => GL.GetUniformLocation(ProgramId, u.Key));
-            return this;
+
+            GL.LinkProgram          ( ProgramId );
+            VerifyProgramStep       ();
+            CanBeUsed               = true;
+            UniformLocation         = UniformTypes
+                .ToDictionary       ( u => u.Key, u => GL.GetUniformLocation(ProgramId, u.Key) );
+
+            return                  ( this );
         }
 
         public void Free()
         {
-            GL.DeleteProgram(ProgramId);
+            GL.DeleteProgram        ( ProgramId );
         }
 
         public void SetUniform(params KeyValuePair<string, float[]>[] uniforms)
         {
             foreach (var u in uniforms)
             {
-                int loc = UniformLocation[u.Key];
-                string utype = UniformTypes[u.Key];
+                int loc             = UniformLocation[u.Key];
+                string utype        = UniformTypes[u.Key];
                 if (utype == "Vec3")
                 {
-                    GL.Uniform3(loc, 1, u.Value);
-                    continue;
+                    GL.Uniform3     ( loc, 1, u.Value );
                 }
                 if (utype == "Mat4")
                 {
-                    GL.UniformMatrix4(loc, 1, false, u.Value);
-                    continue;
+                    GL.UniformMatrix4( loc, 1, false, u.Value );
                 }
             }
         }
@@ -103,14 +105,16 @@ namespace AshyRenderGL
 
         private void VerifyShaderStep(int shaderId)
         {
-            string info = GL.GetShaderInfoLog(shaderId);
-            if (info != "") { throw new Exception(info); }
+            string info             = GL.GetShaderInfoLog(shaderId);
+            if (info != "")
+                throw new Exception ( info );
         }
 
         private void VerifyProgramStep()
         {
-            string info = GL.GetProgramInfoLog(ProgramId);
-            if (info != "") { throw new Exception(info); }
+            string info             = GL.GetProgramInfoLog(ProgramId);
+            if (info != "")
+                throw new Exception ( info );
         }
 
         #endregion

@@ -127,6 +127,7 @@
     <Compile Include="EntitySystem\ScriptComponent.cs" />
     <Compile Include="GameLevel.cs" />
     <Compile Include="Input\Key.cs" />
+    <Compile Include="Input\MouseButton.cs" />
     <Compile Include="IWindow.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Material.cs" />

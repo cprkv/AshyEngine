@@ -1,6 +1,7 @@
 ﻿using System;
 using AshyCore.EngineAPI;
 using AshyRenderGL.RenderCommands;
+using AshyRenderGL.Techniques.GL4;
 
 namespace AshyRenderGL
 {
@@ -22,7 +23,10 @@ namespace AshyRenderGL
 
         public EngineStatus Initialize()
         {
-            throw new NotImplementedException();
+            Engine.I.GameWindow         = new Window();
+            Engine.I.RenderTechnique    = new GL4Technique();
+
+            return                      ( EngineStatus.ReadyToLoad );
         }
 
         public EngineStatus Free()

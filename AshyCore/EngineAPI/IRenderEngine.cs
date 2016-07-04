@@ -13,10 +13,8 @@ namespace AshyCore.EngineAPI
     /// <summary>
     /// The interface provides methods for working with the renderer.
     /// </summary>
-    /// <remarks>
     public interface IRenderEngine : IEngine
     {
-        //todo: temperary. uncomment this later
-        //IWindow GameWindow { get; }
+        IWindow GameWindow { get; }
     }
 }

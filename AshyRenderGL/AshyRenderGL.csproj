@@ -96,6 +96,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Device.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="RenderAPI.cs" />
     <Compile Include="Particle.cs" />
@@ -114,7 +115,8 @@
     <Compile Include="Shader.cs" />
     <Compile Include="ShaderProgram.cs" />
     <Compile Include="Skybox.cs" />
-    <Compile Include="Techniques\Stage.cs" />
+    <Compile Include="Techniques\IStage.cs" />
+    <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AshyCommon\AshyCommon.csproj">

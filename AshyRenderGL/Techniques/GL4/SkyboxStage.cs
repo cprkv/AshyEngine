@@ -6,8 +6,26 @@
 //  
 namespace AshyRenderGL.Techniques.GL4
 {
-    public class SkyboxStage
+    public class SkyboxStage : IStage
     {
-        
+        public bool Init(Scene scene)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Free()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Simulate(float dtime)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Render()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
