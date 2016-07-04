@@ -17,6 +17,8 @@ namespace AshyRenderGL.Techniques
 
         public Scene            Scene { get; private set; }
 
+        public bool             IsInitialized { get; private set; }
+
         /// <summary>
         /// Initializes render stages. Loads level data.
         /// </summary>
@@ -24,14 +26,18 @@ namespace AshyRenderGL.Techniques
         public bool Init(Scene scene)
         {
             Scene               = scene;
-            return Stages
+            var initResult      = Stages
                 .Select         ( stage => stage.Init(Scene) )
-                .All            ( initResult => initResult );
+                .All            ( stageInit => stageInit );
+            IsInitialized       = true;
+
+            return              ( initResult );
         }
 
         public void Free()
         {
             Stages.ForEach      ( stage => stage.Free() );
+            IsInitialized       = false;
         }
 
         public void Simulate(float dtime)

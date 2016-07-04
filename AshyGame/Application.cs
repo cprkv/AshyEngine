@@ -44,13 +44,14 @@ namespace AshyGame
             }
 
             Critical.NoThrow(()         => _user.Core.Log.Error("Application Initialization failed!"));
-            Free                        ();
+
             return                      ( EngineStatus.Failed );
         }
 
         internal static void Execute()
         {
-            // подать _user.Tick в луп виндова
+            _user.Render.GameWindow.RenderFrame += _user.Tick;
+            _user.Render.GameWindow.Run();
         }
 
         internal static void Free()

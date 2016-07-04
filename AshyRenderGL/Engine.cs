@@ -1,4 +1,5 @@
 ﻿using System;
+using AshyCommon;
 using AshyCore;
 using AshyCore.EngineAPI;
 using AshyCore.EngineAPI.EngineCommands;
@@ -18,9 +19,18 @@ namespace AshyRenderGL
 
         public RenderTechnique          RenderTechnique { get; internal set; }
 
+        public Device                   Device { get; internal set; }
+
         public void Tick(float dtime)
         {
-            throw new NotImplementedException();
+            if (RenderTechnique.IsNotSet())
+                return;
+            
+            if ( ! RenderTechnique.IsInitialized)
+                return;
+
+            RenderTechnique.Simulate    ( dtime );
+            RenderTechnique.Render      ();
         }
 
     }

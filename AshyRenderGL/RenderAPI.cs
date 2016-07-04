@@ -24,6 +24,7 @@ namespace AshyRenderGL
         public EngineStatus Initialize()
         {
             Engine.I.GameWindow         = new Window();
+            Engine.I.Device             = new Device();
             Engine.I.RenderTechnique    = new GL4Technique();
 
             return                      ( EngineStatus.ReadyToLoad );
