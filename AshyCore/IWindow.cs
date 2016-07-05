@@ -44,13 +44,16 @@ namespace AshyCore
         int                     Width { get; }
         int                     Height { get; }
         bool                    CaptureMouse { get; set; } 
-        float                   Framerate { get; set; }
+        double                  Framerate { get; }
+        bool                    IsExiting { get; }
 
         bool[]                  PressedKeys { get; }
 
         /// <summary>
         /// Runs main loop.
         /// </summary>
-        void                    Run();
+        void                    Run(double frequency);
+
+        void                    ProcessEvents();
     }
 }

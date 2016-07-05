@@ -47,11 +47,10 @@ namespace AshyCore.EngineAPI.EngineCommands
             if (ActiveCommands.Count == 0)
                 return              ( EngineCommandResult.Success );
 
-            if (!Proxy.CheckAllInitialized)
-                return              ( EngineCommandResult.Failed );
+            //if (!Proxy.CheckAllInitialized)
+            //    return              ( EngineCommandResult.Failed );
 
             var res                 = EngineCommandResult.Success;
-
 
             foreach (var c in ActiveCommands)
             {

@@ -40,10 +40,11 @@ namespace AshyRenderGL
         public event ResizeFunc     Resize;
 
         public bool                 CaptureMouse { get; set; } 
-        public float                Framerate { get; set; }
+        public double               Framerate { get; private set; }
         public bool[]               PressedKeys { get; }
         public int                  Width       => PrivateWindow.Width;
         public int                  Height      => PrivateWindow.Height;
+        public bool                 IsExiting   => PrivateWindow.IsExiting;
         
         #endregion
 
@@ -73,7 +74,7 @@ namespace AshyRenderGL
                 MouseButtonDown?.Invoke     ( (MouseButton) args.Button, args.Position );
 
             PrivateWindow.Mouse.ButtonUp    += (sender, args) => 
-                MouseButtonDown?.Invoke     ( (MouseButton) args.Button, args.Position );
+                MouseButtonUp?.Invoke       ( (MouseButton) args.Button, args.Position );
 
             PrivateWindow.RenderFrame       += (sender, args) => 
                 RenderFrame?.Invoke         ( (float) args.Time );
@@ -91,6 +92,7 @@ namespace AshyRenderGL
                 KeyUp?.Invoke               ( (Key) args.Key );
 
             PrivateWindow.VSync             = VSyncMode.Adaptive;
+            PrivateWindow.Visible           = true;
         }
 
         ~Window()
@@ -107,9 +109,13 @@ namespace AshyRenderGL
         /// <summary>
         /// Runs main loop.
         /// </summary>
-        public void Run()
+        public void Run(double frequency)
         {
-            PrivateWindow.Run               ( Framerate );
+        }
+
+        public void ProcessEvents()
+        {
+            PrivateWindow.ProcessEvents     ();
         }
 
         #endregion

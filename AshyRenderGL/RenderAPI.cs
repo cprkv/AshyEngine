@@ -27,6 +27,7 @@ namespace AshyRenderGL
             Engine.I.Device             = new Device();
             Engine.I.RenderTechnique    = new GL4Technique();
 
+            I.Core.Log.Info             ( "AshyRender: Initialization successful" );
             return                      ( EngineStatus.ReadyToLoad );
         }
 

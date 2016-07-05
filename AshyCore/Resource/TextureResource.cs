@@ -58,7 +58,7 @@ namespace AshyCore.Resource
     {
         #region Propteries
 
-        public string FileExtension = "png";
+        public static string FileExtension = "png";
 
         #endregion
 

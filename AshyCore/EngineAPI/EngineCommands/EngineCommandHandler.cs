@@ -40,7 +40,7 @@ namespace AshyCore.EngineAPI.EngineCommands
             IEngineCommandHandler executer;
             Executers.TryGetValue       ( c.Type, out executer );
 
-            return                      ( executer == null ? EngineCommandResult.Success : Execute(c) );
+            return                      executer?.Execute(c) ?? EngineCommandResult.Success;
         }
     }
 }

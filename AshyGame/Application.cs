@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using AshyGame;
 using AshyCore.EngineAPI;
 using AshyCore.Debug;
+using AshyCore.EngineAPI.EngineCommands;
 
 namespace AshyGame
 {
@@ -37,6 +39,8 @@ namespace AshyGame
             status[2] = Proxy.Scripting .Initialize(); // todo: order??
             status[3] = Proxy.Render    .Initialize();
 
+            _user.Initialize            ();
+
             if (!status.Any(s => s == EngineStatus.CriticalFailed))
             {
                 GameAPI.I.Core.Log.Info ("[Game] All systems were loaded.");
@@ -50,13 +54,18 @@ namespace AshyGame
 
         internal static void Execute()
         {
-            _user.Render.GameWindow.RenderFrame += _user.Tick;
-            _user.Render.GameWindow.Run();
+            _user.CommandProcessor.AddCommand(new LoadLevel("TestL02"));
+
+            Stopwatch loopTimer;
+            while ( ! _user.Render.GameWindow.IsExiting)
+            {
+                _user.Tick              ( 60 );
+            }
         }
 
         internal static void Free()
         {
-            Critical.NoThrow(()         => _user.Core.Log.Error("--- Application shutting down ---"));
+            Critical.NoThrow(()         => _user.Core.Log.Info("--- Application shutting down ---"));
             EngineStatus[] status       = new EngineStatus[5];
 
             status[4] = Proxy.Game      .Free();
@@ -65,12 +74,7 @@ namespace AshyGame
             status[3] = Proxy.Render    .Free();
             status[0] = Proxy.Core      .Free();
 
-            if (!status.All(s => s == EngineStatus.Free))
-            {
-                Critical.NoThrow(()     => GameAPI.I.Core.Log.Info("[Application] Free unsuccessful."));
-            }
             Critical.NoThrow(()         => Memory.Collect(false));
-            Critical.NoThrow(()         => GameAPI.I.Core.Log.Info("[Application] Free successful."));
         }
     }
 }

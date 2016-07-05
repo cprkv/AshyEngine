@@ -25,6 +25,7 @@ namespace AshyScripting
 
         public EngineStatus Initialize()
         {
+            I.Core.Log.Info             ("AshyScripting: Initialization successful");
             return                      ( EngineStatus.ReadyToLoad );
         }
 

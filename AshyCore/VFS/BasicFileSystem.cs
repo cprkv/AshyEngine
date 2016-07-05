@@ -60,6 +60,11 @@ namespace AshyCore.VFS
             throw new System.NotImplementedException();
         }
 
+        public string[] GetDirectory(string path)
+        {
+            return Directory.GetFiles(Prefix + path);
+        }
+
         public void Dispose()
         {
         } 

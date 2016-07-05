@@ -42,5 +42,11 @@ namespace AshyCore.VFS
         /// <param name="path">Path to file.</param>
         /// <param name="lines">The lines.</param>
         void WriteLines(string path, string[] lines);
+
+        /// <summary>
+        /// Returns all files founded in directory.
+        /// </summary>
+        /// <param name="path">In example, "Meshes/"</param>
+        string[] GetDirectory(string path);
     }
 }

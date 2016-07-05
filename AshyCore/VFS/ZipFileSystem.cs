@@ -75,6 +75,11 @@ namespace AshyCore.VFS
             throw new NotImplementedException();
         }
 
+        public string[] GetDirectory(string path)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
             Archive.Dispose();

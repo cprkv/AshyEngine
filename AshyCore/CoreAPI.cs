@@ -38,12 +38,9 @@ namespace AshyCore
 #endif
                 I.Core.Log              = new Log(I.UserName);
                 I.Core.Log.Initialize   ();
-                I.Core.Log.Info         ("--- AshyCore Initialization ---");
-                I.Core.Log.Info         ("Log: initialized");
 
                 var iniParser           = new FileIniDataParser().ReadFile(I.UserName + ".ini");
                 I.Core.UserConfig       = new ConfigTable(iniParser);
-                I.Core.Log.Info         ("UserConfig: initialized");
 
                 if (I.Core.UserConfig["FS", "Type"] == "Basic")
                 {

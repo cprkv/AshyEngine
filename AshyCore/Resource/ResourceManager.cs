@@ -8,7 +8,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.AccessControl;
+using System.Text.RegularExpressions;
+using AshyCommon;
 using AshyCore.Debug;
 
 namespace AshyCore.Resource
@@ -22,7 +23,7 @@ namespace AshyCore.Resource
     {
         #region Private Properties
 
-        private readonly ResorceConstructor[]   _resourceConstructors;
+        private readonly Dictionary<string, ResorceConstructor> _resourceConstructors;
 
         private Dictionary<string, Resource>    Resources { get; } = new Dictionary<string, Resource>();
 
@@ -36,13 +37,13 @@ namespace AshyCore.Resource
         public ResourceManager(VFS.IFileSystem _fs)
         {
             FS = _fs;
-            _resourceConstructors = new ResorceConstructor[]
+            _resourceConstructors = new Dictionary<string, ResorceConstructor>()
             {
-                (path, target, fs)  => new ConfigResource        (path, target, fs),
-                (path, target, fs)  => new LuaScriptResource     (path, target, fs),
-                (path, target, fs)  => new MeshesResource        (path, target, fs),
-                (path, target, fs)  => new TextureJpegResource   (path, target, fs),
-                (path, target, fs)  => new TexturePngResource    (path, target, fs)
+                { ConfigResource.FileExtension,         (path, target, fs) => new ConfigResource     (path, target, fs) },
+                { LuaScriptResource.FileExtension,      (path, target, fs) => new LuaScriptResource  (path, target, fs) },
+                { MeshesResource.FileExtension,         (path, target, fs) => new MeshesResource     (path, target, fs) },
+                { TextureJpegResource.FileExtension,    (path, target, fs) => new TextureJpegResource(path, target, fs) },
+                { TexturePngResource.FileExtension,     (path, target, fs) => new TexturePngResource (path, target, fs) },
             };
         }
 
@@ -63,15 +64,20 @@ namespace AshyCore.Resource
             get
             {
                 if (Resources.ContainsKey(path))
-                    return          ( Resources[path].RC );
+                    return                  ( Resources[path].RC );
 
-                var resource        = CreateResourceInstance(path, target);
-                if (resource == null)
-                    throw           new ArgumentException($"Error during load resorce by path: \"{path}\".");
+                Resource resource;
+                try
+                {
+                    resource                = CreateResourceInstance(path, target);
+                }
+                catch (Exception e)
+                {
+                    throw                   new ArgumentException($"Error during load resorce by path: \"{path}\".", e);
+                }
+                Resources.Add               ( path, resource );
 
-                Resources.Add       (path, resource);
-
-                return              ( resource.RC );
+                return                      ( resource.RC );
             }
         }
 
@@ -100,7 +106,7 @@ namespace AshyCore.Resource
                 .ToList                     ();
 
             CollectWithoutWaiting           ( pred );
-            Memory.Collect    ( false );
+            Memory.Collect                  ( false );
 
             return                          ( targets.Count(x => x.IsAlive) );
         }
@@ -110,7 +116,7 @@ namespace AshyCore.Resource
         /// </param>
         public void CollectWithoutWaiting(Func<ResourceTarget, bool> pred)
         {
-            foreach (var resource in Resources.Where(rc => pred(rc.Value.Target)))
+            foreach (var resource in Resources.Where(rc => pred(rc.Value.Target)).ToArray())
             {
                 Resources.Remove            ( resource.Key );
             }
@@ -121,19 +127,54 @@ namespace AshyCore.Resource
         /// </summary>
         private Resource CreateResourceInstance(string path, ResourceTarget target)
         {
-            foreach (var resource in _resourceConstructors)
+            Func<string, string> normalizePath = s =>
+                s.Replace                   ( "\\", "/" );
+
+            Func<string, string> getExtension = s => 
+                s.Substring                 ( s.LastIndexOf(".", StringComparison.Ordinal) + 1 );
+
+            Func<string, string> getFileName = s =>
             {
-                try
+                var temp                    = s.Substring(s.LastIndexOf("/", StringComparison.Ordinal) + 1);
+                var filename                = temp.Substring(0, temp.LastIndexOf(".", StringComparison.Ordinal));
+                return                      ( filename );
+            }; 
+
+            string extension;
+            try
+            {
+                path                        = normalizePath(path);
+                string      searchingDir    = path.Substring(0, path.LastIndexOf("/", StringComparison.Ordinal));       // where to search file
+                string      filename        = path.Substring(path.LastIndexOf("/", StringComparison.Ordinal) + 1);      // filename without file extension
+                string[]    directory       = FS.GetDirectory(searchingDir);                                            // full directory files with extensions
+                extension                   = directory                                                                 
+                    .Select                 ( normalizePath )                                               
+                    .Where                  ( s => getFileName(s) == filename )
+                    .Select                 ( getExtension )                                  
+                    .FirstOrDefault         ()
+                    ?.ToLower               ();
+
+                if (extension == null)
                 {
-                    var result              = resource(path, target, FS);
-                    return                  ( result );
-                }
-                catch
-                {
-                    // ignored
+                    throw new ArgumentException( "These no files with name " + filename );
                 }
             }
-            return                          ( null );
+            catch (Exception e)
+            {
+                throw new ArgumentException ( "Can't find directory item by path: " + path, e );
+            }
+            var resConstructor              = _resourceConstructors.GetOrNull(extension);
+
+            Resource result;
+            try
+            {
+                result                      = resConstructor(path, target, FS);
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException ( "Can't construct resource item by path: " + path, e );
+            }
+            return                          ( result );
         }
 
         #endregion

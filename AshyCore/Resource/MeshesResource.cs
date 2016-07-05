@@ -26,6 +26,19 @@ namespace AshyCore.Resource
 
         private static CultureInfo _parsingCulture = null;
 
+        private static CultureInfo GetParsingCulture
+        {
+            get
+            {
+                if (_parsingCulture == null)
+                {
+                    _parsingCulture = (CultureInfo) CultureInfo.CurrentCulture.Clone();
+                    _parsingCulture.NumberFormat.CurrencyDecimalSeparator = ".";
+                }
+                return          ( _parsingCulture );
+            }
+        }
+
         #endregion
 
 
@@ -34,11 +47,6 @@ namespace AshyCore.Resource
         public MeshesResource(string path, ResourceTarget target, VFS.IFileSystem fs)
             : base(path, target, fs)
         {
-            if (_parsingCulture == null)
-            {
-                _parsingCulture = (CultureInfo) CultureInfo.CurrentCulture.Clone();
-                _parsingCulture.NumberFormat.CurrencyDecimalSeparator = ".";
-            }
         }
 
         #endregion
@@ -64,24 +72,22 @@ namespace AshyCore.Resource
             {
                 if (str[0] == "v")
                 {
-                    vert.Add(new Vec3(float.Parse(str[1], NumberStyles.Any, _parsingCulture),
-                                      float.Parse(str[2], NumberStyles.Any, _parsingCulture),
-                                      float.Parse(str[3], NumberStyles.Any, _parsingCulture))
+                    vert.Add(new Vec3(float.Parse(str[1], NumberStyles.Any, GetParsingCulture),
+                                      float.Parse(str[2], NumberStyles.Any, GetParsingCulture),
+                                      float.Parse(str[3], NumberStyles.Any, GetParsingCulture))
                             );
-
-                    
                 }
                 if (str[0] == "vn")
                 {
-                    normals.Add(new Vec3(float.Parse(str[1], NumberStyles.Any, _parsingCulture),
-                                         float.Parse(str[2], NumberStyles.Any, _parsingCulture),
-                                         float.Parse(str[3], NumberStyles.Any, _parsingCulture))
+                    normals.Add(new Vec3(float.Parse(str[1], NumberStyles.Any, GetParsingCulture),
+                                         float.Parse(str[2], NumberStyles.Any, GetParsingCulture),
+                                         float.Parse(str[3], NumberStyles.Any, GetParsingCulture))
                                 );
                 }
                 if (str[0] == "vt")
                 {
-                    uvw.Add(new Vec3(    float.Parse(str[1], NumberStyles.Any, _parsingCulture),
-                                     1 - float.Parse(str[2], NumberStyles.Any, _parsingCulture),
+                    uvw.Add(new Vec3(    float.Parse(str[1], NumberStyles.Any, GetParsingCulture),
+                                     1 - float.Parse(str[2], NumberStyles.Any, GetParsingCulture),
                                      0.0f)                                  // todo: delete this zero!!
                             );            
                 }

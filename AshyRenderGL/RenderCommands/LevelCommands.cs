@@ -11,7 +11,7 @@ using AshyCore.EntitySystem;
 
 namespace AshyRenderGL.RenderCommands
 {
-        #region Helper
+    #region Helper
 
     internal static class LevelCmdHelper
     {

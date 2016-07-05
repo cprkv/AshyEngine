@@ -24,6 +24,7 @@ namespace AshyPhysics
 
         public EngineStatus Initialize()
         {
+            I.Core.Log.Info             ( "AshyGame: Initialization successful" );
             return                      ( EngineStatus.ReadyToUse );
         }
 
