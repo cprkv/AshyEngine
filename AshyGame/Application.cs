@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using AshyGame;
 using AshyCore.EngineAPI;
 using AshyCore.Debug;
@@ -56,10 +57,24 @@ namespace AshyGame
         {
             _user.CommandProcessor.AddCommand(new LoadLevel("TestL02"));
 
-            Stopwatch loopTimer;
+            float msFinished            = 16.666667f;
+            Stopwatch loopTimer         = Stopwatch.StartNew();
+
+            // main loop
             while ( ! _user.Render.GameWindow.IsExiting)
             {
-                _user.Tick              ( 60 );
+                loopTimer.Reset         ();
+                _user.Tick              ( msFinished );
+
+                if (loopTimer.ElapsedMilliseconds > 16)
+                {
+                    msFinished          = loopTimer.ElapsedMilliseconds;
+                }
+                else
+                {
+                    msFinished          = 16;
+                    Thread.Sleep        ( 16 - (int)loopTimer.ElapsedMilliseconds );
+                }
             }
         }
 

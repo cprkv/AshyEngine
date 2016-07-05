@@ -40,7 +40,6 @@ namespace AshyRenderGL
         public event ResizeFunc     Resize;
 
         public bool                 CaptureMouse { get; set; } 
-        public double               Framerate { get; private set; }
         public bool[]               PressedKeys { get; }
         public int                  Width       => PrivateWindow.Width;
         public int                  Height      => PrivateWindow.Height;
@@ -106,16 +105,14 @@ namespace AshyRenderGL
 
         #region Methods
 
-        /// <summary>
-        /// Runs main loop.
-        /// </summary>
-        public void Run(double frequency)
-        {
-        }
-
         public void ProcessEvents()
         {
             PrivateWindow.ProcessEvents     ();
+        }
+
+        public void SwapBuffers()
+        {
+            PrivateWindow.SwapBuffers       ();
         }
 
         #endregion

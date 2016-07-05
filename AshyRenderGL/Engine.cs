@@ -31,6 +31,7 @@ namespace AshyRenderGL
 
             RenderTechnique.Simulate    ( dtime );
             RenderTechnique.Render      ();
+            GameWindow.SwapBuffers      ();
         }
 
     }
