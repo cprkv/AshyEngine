@@ -2,6 +2,7 @@
 using AshyCore.EngineAPI;
 using AshyRenderGL.RenderCommands;
 using AshyRenderGL.Techniques.GL4;
+using OpenTK.Graphics.OpenGL4;
 
 namespace AshyRenderGL
 {
@@ -25,7 +26,10 @@ namespace AshyRenderGL
         {
             Engine.I.GameWindow         = new Window();
             Engine.I.Device             = new Device();
-            Engine.I.RenderTechnique    = new GL4Technique();
+            Engine.I.Device.Initialize  ();
+            I.Core.Log.Info             ( "OpenGL Version: " + GL.GetString(StringName.Version) );
+
+            Engine.I.RenderTechnique    = new LevelTechnique();
 
             I.Core.Log.Info             ( "AshyRender: Initialization successful" );
             return                      ( EngineStatus.ReadyToLoad );

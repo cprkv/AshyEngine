@@ -21,8 +21,6 @@ namespace AshyScripting
 
         internal List<ScriptTrigger>                Triggers { get; set; }
 
-        private bool                                _levelLoaded = false;
-
         internal void CreateWorld()
         {
             LuaState                    = new Lua();
@@ -36,7 +34,7 @@ namespace AshyScripting
                    import               ('AshyCore',   'AshyCore.Entity')"
                 );
 
-            _levelLoaded                = true;
+            I.Status                    = EngineStatus.LoadedWorld;
         }
 
         internal void DestroyWorld()
@@ -46,7 +44,7 @@ namespace AshyScripting
             LuaState?.Dispose           ();
             LuaState                    = null;
 
-            _levelLoaded                = false;
+            I.Status                    = EngineStatus.ReadyToUse;
         }
 
         #endregion
@@ -76,7 +74,7 @@ namespace AshyScripting
 
         public void Tick(float dtime)
         {
-            if (_levelLoaded)
+            if (I.Status == EngineStatus.LoadedWorld)
             {
                 Triggers.ForEach        ( x => x.AcceptTrigger() );
                 UpdateFunctions.ForEach ( f => f.Value.Call(f.Key, dtime) );

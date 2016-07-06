@@ -15,7 +15,7 @@ namespace AshyRenderGL.Techniques
     {
         protected Queue<IStage> Stages;
 
-        public Scene            Scene { get; private set; }
+        public RenderingScene   RenderingScene { get; private set; }
 
         public bool             IsInitialized { get; private set; }
 
@@ -23,11 +23,11 @@ namespace AshyRenderGL.Techniques
         /// Initializes render stages. Loads level data.
         /// </summary>
         /// <returns><code>true</code>, if no fails.</returns>
-        public bool Init(Scene scene)
+        public bool Init(RenderingScene renderingScene)
         {
-            Scene               = scene;
+            RenderingScene      = renderingScene;
             var initResult      = Stages
-                .Select         ( stage => stage.Init(Scene) )
+                .Select         ( stage => stage.Init(RenderingScene) )
                 .All            ( stageInit => stageInit );
             IsInitialized       = true;
 

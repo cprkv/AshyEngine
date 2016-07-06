@@ -9,11 +9,11 @@ namespace AshyRenderGL.Techniques
     public interface IStage
     {
         /// <summary>
-        /// Special method for loading scene data.
+        /// Special method for loading RenderingScene data.
         /// </summary>
-        /// <param name="scene"> Loading scene to graphics card. </param>
+        /// <param name="renderingScene"> Loading RenderingScene to graphics card. </param>
         /// <returns> <code>true</code>, if no fails. </returns>
-        bool Init(Scene scene);
+        bool Init(RenderingScene renderingScene);
 
         void Free();
 

@@ -8,7 +8,7 @@ namespace AshyRenderGL.Techniques.GL4
 {
     public class ParticleStage : IStage
     {
-        public bool Init(Scene scene)
+        public bool Init(RenderingScene renderingScene)
         {
             throw new System.NotImplementedException();
         }

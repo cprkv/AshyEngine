@@ -4,28 +4,54 @@
 // Copyright (C) AshyCat 2016
 // This product are licensed under MICROSOFT REFERENCE SOURCE LICENSE(MS-RSL).
 //  
+
+using System;
+
 namespace AshyRenderGL.Techniques.GL4
 {
     public class SkyboxStage : IStage
     {
-        public bool Init(Scene scene)
+        private Skybox              _skybox;
+
+        public bool Init(RenderingScene renderingScene)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var skyboxName      = RenderAPI.I.Game.Level.LevelInfo["LevelProperties", "Skybox"];
+                var skyboxData      = RenderAPI.I.Game.Level.LevelInfo[skyboxName];
+                _skybox             = Skybox.Load(
+                                            skyboxData["right"], 
+                                            skyboxData["left"], 
+                                            skyboxData["top"], 
+                                            skyboxData["bottom"], 
+                                            skyboxData["back"], 
+                                            skyboxData["front"] );
+
+                return              ( true );
+            }
+            catch (Exception e)
+            {
+                RenderAPI.I.Core.Log.Error("Can't load skybox", e);
+#if DEBUG
+                throw;
+#endif
+                return              ( false );
+            }
         }
 
         public void Free()
         {
-            throw new System.NotImplementedException();
+            _skybox                 = null;
         }
 
         public void Simulate(float dtime)
         {
-            throw new System.NotImplementedException();
+            // todo: make clouds move here 
         }
 
         public void Render()
         {
-            throw new System.NotImplementedException();
+            _skybox?.BindAndRender  ();
         }
     }
 }

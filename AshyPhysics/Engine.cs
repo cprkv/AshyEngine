@@ -37,8 +37,6 @@ namespace AshyPhysics
 
         internal Dictionary<Entity, RigidBody>      Objects { get; set; }
 
-        private bool                                _levelLoaded = false;
-
         #endregion
 
 
@@ -59,7 +57,7 @@ namespace AshyPhysics
 
         public void Tick(float dtime)
         {
-            if (_levelLoaded)
+            if (Status == EngineStatus.LoadedWorld)
             {
                 World.StepSimulation( dtime, maxSubSteps: 30 );
             }
@@ -75,7 +73,7 @@ namespace AshyPhysics
             Objects                 = null;
             World                   = null;
 
-            _levelLoaded            = false;
+            Status                  = EngineStatus.ReadyToUse;
         }
 
         internal void CreateWorld()
@@ -95,7 +93,7 @@ namespace AshyPhysics
                 Gravity             = new Vector3(0.0f, -9.8f, 0.0f)
             };
 
-            _levelLoaded            = true;
+            Status                  = EngineStatus.LoadedWorld;
         }
 
         #endregion

@@ -9,15 +9,15 @@ using System.Collections.Generic;
 
 namespace AshyRenderGL.Techniques.GL4
 {
-    public class GL4Technique : RenderTechnique
+    public class LevelTechnique : RenderTechnique
     {
-        public GL4Technique()
+        public LevelTechnique()
         {
             Stages              = new Queue<IStage>(3);
 
             Stages.Enqueue      ( new SkyboxStage() );
-            Stages.Enqueue      ( new DiffuseStage() );
-            Stages.Enqueue      ( new ParticleStage() );
+            //Stages.Enqueue      ( new DiffuseStage() );
+            //Stages.Enqueue      ( new ParticleStage() );
         }
     }
 }

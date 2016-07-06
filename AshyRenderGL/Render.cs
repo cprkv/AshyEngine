@@ -43,13 +43,13 @@ namespace AshyRenderGL
 
     //    #region Properties
 
-    //    private readonly Vec3 _lightPosition = new Vec3(-5.0f, 5.0f, -5.0f);    
+    //    private readonly Vec3     _lightPosition = new Vec3(-5.0f, 5.0f, -5.0f);    
 
-    //    public float            Framerate { get; set; }     
-    //    private Point           _windowCenter;              
-    //    public GameWindow       Window;                     
-    //    private float           _mouseSense;                
-    //    private bool            _captureMouse = true;       
+    //    public float              Framerate { get; set; }     
+    //    private Point             _windowCenter;              
+    //    public GameWindow         Window;                     
+    //    private float             _mouseSense;                
+    //    private bool              _captureMouse = true;       
 
     //    private Camera Camera => RenderAPI.Instance.Level.Player.Camera;
 
@@ -57,13 +57,13 @@ namespace AshyRenderGL
     //    private readonly Dictionary<Texture, RenderTexture>     _textures       = new Dictionary<Texture, RenderTexture>();
     //    private readonly Dictionary<ShaderAlias, ShaderProgram> _shaderPrograms = new Dictionary<ShaderAlias, ShaderProgram>();
 
-    //    private int _lastcube = 1;
-    //    private UITexture _ui;
-    //    private Skybox _skybox;
-    //    //private Particle _particle;
-    //    private Vec3 _brightness = new Vec3(0.2f, 0.2f, 0.4f);
-    //    private Stopwatch _timer;
-    //    private float _lastime;
+    //    private int               _lastcube = 1;
+    //    private UITexture         _ui;
+    //    private Skybox            _skybox;
+    //    //private Particle        _particle;
+    //    private Vec3              _brightness = new Vec3(0.2f, 0.2f, 0.4f);
+    //    private Stopwatch         _timer;
+    //    private float             _lastime;
 
     //    #endregion
 
@@ -198,10 +198,10 @@ namespace AshyRenderGL
     //            if (!shaderProgram.CanBeUsed) continue;
     //            shaderProgram.Use();
     //            shaderProgram.SetUniform(
-    //                new Uniform("lightPos", _lightPosition.Values),
-    //                new Uniform("viewProjectionMat", Camera.ViewProj.Values),
-    //                new Uniform("modelMat", entity.TransformMatrix.Values),
-    //                new Uniform("ambientLight", (/*_brightness * */renderComponent.Material.Color).Values)
+    //                new Uniform("lightPos",           _lightPosition.Values),
+    //                new Uniform("viewProjectionMat",  Camera.ViewProj.Values),
+    //                new Uniform("modelMat",           entity.TransformMatrix.Values),
+    //                new Uniform("ambientLight",       (renderComponent.Material.Color).Values)
     //                );
 
     //            // bind texture

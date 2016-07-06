@@ -51,6 +51,8 @@ namespace AshyScripting.ScriptingCommands
             var ll                      = (AshyCore.EngineAPI.EngineCommands.LoadLevel) c;
             var res                     = EngineCommandResult.Success;
 
+            Engine.I.CreateWorld       ();
+
             foreach (var entity in ll.LoadingLevel.Entities)
             {
                 res                     = LevelCmdHelper.InitEntity(entity).Worst(res);

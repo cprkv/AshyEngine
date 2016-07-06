@@ -6,6 +6,7 @@
 //  
 
 using AshyCore.Debug;
+using AshyCore.EngineAPI;
 using AshyCore.EngineAPI.EngineCommands;
 using AshyCore.EntitySystem;
 
@@ -17,6 +18,7 @@ namespace AshyRenderGL.RenderCommands
     {
         internal static EngineCommandResult InitEntity(Entity entity)
         {
+            // todo: initialize entity on RenderingScene
             return                      ( EngineCommandResult.Success );
         }
     }
@@ -29,7 +31,9 @@ namespace AshyRenderGL.RenderCommands
         public EngineCommandResult Execute(IEngineCommand c)
         {
             var aec                     = (AshyCore.EngineAPI.EngineCommands.AddEntity) c;
-            return                      ( LevelCmdHelper.InitEntity(aec.Entity) );
+            var res                     = LevelCmdHelper.InitEntity(aec.Entity);
+
+            return                      ( res );
         }
     }
 
@@ -38,14 +42,13 @@ namespace AshyRenderGL.RenderCommands
         public EngineCommandResult Execute(IEngineCommand c)
         {
             var ll                      = (AshyCore.EngineAPI.EngineCommands.LoadLevel) c;
-            var res                     = EngineCommandResult.Success;
+            var scene                   = new RenderingScene(ll.LoadingLevel.Entities);
+            var isLoaded                = Engine.I.RenderTechnique.Init( scene );
 
-            foreach (var entity in ll.LoadingLevel.Entities)
-            {
-                res                     = LevelCmdHelper.InitEntity(entity).Worst(res);
-            }
+            if (isLoaded)
+                Engine.I.Status         = EngineStatus.LoadedWorld;
 
-            return                      ( res );
+            return                      ( isLoaded ? EngineCommandResult.Success : EngineCommandResult.Failed );
         }
     }
 
@@ -55,6 +58,9 @@ namespace AshyRenderGL.RenderCommands
         {
             Memory.Collect              ( showLog: true );
 
+            Engine.I.RenderTechnique?.Free();
+
+            Engine.I.Status             = EngineStatus.ReadyToUse;
             return                      ( EngineCommandResult.Success ); 
         }
     }

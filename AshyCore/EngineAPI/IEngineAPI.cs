@@ -15,6 +15,7 @@ namespace AshyCore.EngineAPI
         Failed,
         ReadyToLoad,
         ReadyToUse,
+        LoadedWorld,
         Free,
         FreeWithMemoryLeaks,
     }

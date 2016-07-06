@@ -8,6 +8,7 @@
 using System;
 using AshyCore;
 using AshyCore.Debug;
+using AshyCore.EngineAPI;
 using AshyCore.EngineAPI.EngineCommands;
 using AshyCore.EntitySystem;
 using BulletSharp;
@@ -90,6 +91,8 @@ namespace AshyPhysics.PhysicsCommands
         {
             var ll                      = (AshyCore.EngineAPI.EngineCommands.LoadLevel) c;
             var res                     = EngineCommandResult.Success;
+
+            Engine.I.CreateWorld        ();
 
             foreach (var entity in ll.LoadingLevel.Entities)
             {

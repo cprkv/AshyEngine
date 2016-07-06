@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
+using AshyCommon;
 using AshyCommon.Math;
 using AshyCore;
 using OpenTK.Graphics.OpenGL4;
@@ -20,10 +21,10 @@ namespace AshyRenderGL
     {
         #region Properties
 
-        private Mesh _cube;
-        public ShaderProgram ShaderProgram { get; private set; }
-        //public Render.BuffersLayout Buf { get; private set; }
-        private int TextureId { get; }
+        private Mesh                _cube;
+        public ShaderProgram        ShaderProgram { get; private set; }
+        public BuffersLayout        Buf { get; private set; }
+        private int                 TextureId { get; }
 
         #endregion
 
@@ -32,7 +33,7 @@ namespace AshyRenderGL
 
         private Skybox(int textureId)
         {
-            TextureId = textureId;
+            TextureId               = textureId;
         }
 
         #endregion
@@ -42,27 +43,35 @@ namespace AshyRenderGL
 
         public void BindAndRender()
         {
-            //GL.BindVertexArray(Buf.VertexArrayObjectId);
-            GL.BindTexture(TextureTarget.TextureCubeMap, TextureId);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, _cube.VertIndices.Length);
-            GL.BindVertexArray(0);
+            if (_cube.IsNotSet())   return;
+
+            GL.BindVertexArray      ( Buf.VertexArrayObjectId );
+            GL.BindTexture          ( TextureTarget.TextureCubeMap, TextureId );
+            GL.DrawArrays           ( PrimitiveType.Triangles, 0, _cube.VertIndices.Length );
+            GL.BindVertexArray      ( 0 );
         }
 
+        /// <summary>
+        /// arguments: right left top bottom back front
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static Skybox Load(params string[] path)
         {
-            throw new NotImplementedException();
-            //var textures = path.Select(x => RenderAPI.Instance.Resource.Get<Texture>(
-            //    $"Textures/{x}", AshyCore.Resource.ResourceTarget.LoadedLevelPrivateRender))
-            //    .ToArray();
-            //return Load(textures);
+            var textures            = path
+                .Select             ( x => RenderAPI.I.Core.RM.Get<Texture>($"Textures/{x}", AshyCore.Resource.ResourceTarget.LoadedLevelPrivateRender) )
+                .ToArray            ();
+
+            return                  ( Load(textures) );
         }
 
         private static Skybox Load(params Texture[] textures)
         {
-            Skybox result = new Skybox(GL.GenTexture());
+            Skybox result           = new Skybox(GL.GenTexture());
 
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.TextureCubeMap, result.TextureId);
+
+            GL.ActiveTexture        ( TextureUnit.Texture0 );
+            GL.BindTexture          ( TextureTarget.TextureCubeMap, result.TextureId );
 
             Func<int, Action<BitmapData>> procFunc =
                 iter => data => 
@@ -72,70 +81,45 @@ namespace AshyRenderGL
                         data.Scan0
                     );
 
-            for (   int j = 0; j < textures.Length; j++)
+            for (int j = 0; j < textures.Length; j++)
             {
                 textures[j].ProcessData(procFunc(j));
             }
 
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter         ( TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear );
+            GL.TexParameter         ( TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear );
+                                      
+            GL.TexParameter         ( TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)TextureParameterName.ClampToEdge );
+            GL.TexParameter         ( TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureParameterName.ClampToEdge );
+            GL.TexParameter         ( TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)TextureParameterName.ClampToEdge );
 
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)TextureParameterName.ClampToEdge);
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureParameterName.ClampToEdge);
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)TextureParameterName.ClampToEdge);
+            GL.BindTexture          ( TextureTarget.TextureCubeMap, 0 ); 
 
-            GL.BindTexture(TextureTarget.TextureCubeMap, 0); 
+            result.LoadVO           ();
 
-            //result.LoadVO();
-
-            return result;
+            return                  ( result );
         }
 
-        //private void LoadVO()
-        //{
-        //    _cube = RenderAPI.Instance.Resource.Get<Mesh>("Meshes/cube", AshyCore.Resource.ResourceTarget.LoadedLevelPrivateRender);
+        private void LoadVO()
+        {
+          //Setting buffers
 
-        //    Buf = new Render.BuffersLayout();
-        //    var data = _cube.GetBufferData();
+            _cube                   = RenderAPI.I.Core.RM.Get<Mesh>("Meshes/cube", AshyCore.Resource.ResourceTarget.LoadedLevelPrivateRender);
+            Buf                     = Engine.I.Device.LoadMesh(_cube);
 
-        //    Buf.VertexBufferId = GL.GenBuffer();
-        //    GL.BindBuffer(BufferTarget.ArrayBuffer, Buf.VertexBufferId);
-        //    GL.BufferData(BufferTarget.ArrayBuffer, data.SizeOfVertices, data.Data, BufferUsageHint.StaticDraw);
+          //Creating shader program 
 
-        //    Buf.IndexBufferId = GL.GenBuffer();
-        //    GL.BindBuffer(BufferTarget.ElementArrayBuffer, Buf.IndexBufferId);
-        //    GL.BufferData(BufferTarget.ElementArrayBuffer, data.SizeOfIndices, data.Indecies, BufferUsageHint.StaticDraw);
+            var uniformTypes        = new Dictionary<string, string>
+            {
+                { "viewProjectionMat",  "Mat4" },
+                { "ambientLight",       "Vec3" },
+                { "lightPos",           "Vec3" },
+                { "modelMat",           "Mat4" }
+            };
+            var skyShader           = new ShaderAlias(@"skybox", @"skybox", uniformTypes);
 
-        //    Buf.VertexArrayObjectId = GL.GenVertexArray();
-        //    GL.BindVertexArray(Buf.VertexArrayObjectId);
-
-        //    var attribLength = 4;
-
-        //    for (int i = 0; i < attribLength; i++) // enable attributes for (position uvw normal tangent bitangent)
-        //    {
-        //        GL.EnableVertexAttribArray(i);
-        //    }
-        //    GL.BindBuffer(BufferTarget.ArrayBuffer, Buf.VertexBufferId);
-
-        //    for (int i = 0; i < attribLength; i++) // setting attributes sizes
-        //    {
-        //        GL.VertexAttribPointer(i, 3, VertexAttribPointerType.Float, false, Vec3.SizeInBytes * attribLength, Vec3.SizeInBytes * i);
-        //    }
-        //    GL.BindBuffer(BufferTarget.ElementArrayBuffer, Buf.IndexBufferId);
-
-        //    var shaderArray = new[]
-        //    {
-        //        new Shader(@"Shaders\skybox.vs", ShaderType.VertexShader),
-        //        new Shader(@"Shaders\skybox.fs", ShaderType.FragmentShader)
-        //    };
-        //    ShaderProgram = new ShaderProgram(new Dictionary<string, string>
-        //    {
-        //        { "viewProjectionMat", "Mat4" },
-        //        { "ambientLight", "Vec3" },
-        //        { "lightPos", "Vec3" },
-        //        { "modelMat", "Mat4" }
-        //    }, shaderArray).Compile();
-        //}
+            ShaderProgram           = ShaderProgram.Parse(skyShader).Compile();
+        }
 
         #endregion 
     }

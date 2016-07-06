@@ -5,6 +5,7 @@
 // This product are licensed under MICROSOFT REFERENCE SOURCE LICENSE(MS-RSL).
 //  
 
+using System;
 using System.Collections.Generic;
 using AshyCommon;
 using AshyCommon.Math;
@@ -25,11 +26,7 @@ namespace AshyRenderGL
     {
         public Dictionary<Mesh,         BuffersLayout> Buffers { get; private set; }
         public Dictionary<Texture,      RenderTexture> Textures { get; private set; }
-        public Dictionary<ShaderAlias,  ShaderProgram> ShaderPrograms { get; private set;}
-
-        public Device()
-        {
-        }
+        public Dictionary<ShaderAlias,  ShaderProgram> ShaderPrograms { get; private set; }
 
         public void Initialize()
         {
@@ -45,7 +42,7 @@ namespace AshyRenderGL
 
         public BuffersLayout LoadMesh(Mesh mesh)
         {
-            if (Buffers.ContainsKey(mesh))
+            if ( ! Buffers.ContainsKey(mesh))
             {
                 SetBufferAttributes     ( mesh );
                 SetBuferData            ( mesh );
@@ -53,15 +50,16 @@ namespace AshyRenderGL
             return                      ( Buffers[mesh] );
         } 
 
+
         #region Private Methods
 
         private void SetBufferAttributes(Mesh mesh)
         {
-            var buf                     = Buffers[mesh];
+            var buf                     = Buffers.GetOrAdd(mesh, _ => new BuffersLayout());
             buf.VertexArrayObjectId     = GL.GenVertexArray();
             GL.BindVertexArray          ( buf.VertexArrayObjectId );
 
-            var attribLength = 4;
+            var attribLength            = 4;
 
             for (int i = 0; i < attribLength; i++) // enable attributes for (position uvw normal tangent bitangent)
             {

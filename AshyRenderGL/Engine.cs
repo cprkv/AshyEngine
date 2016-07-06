@@ -23,12 +23,11 @@ namespace AshyRenderGL
 
         public void Tick(float dtime)
         {
-            if (RenderTechnique.IsNotSet())
+            if ( I.Status != EngineStatus.LoadedWorld || 
+                 RenderTechnique.IsNotSet()           || 
+                 ! RenderTechnique.IsInitialized )
                 return;
             
-            if ( ! RenderTechnique.IsInitialized)
-                return;
-
             RenderTechnique.Simulate    ( dtime );
             RenderTechnique.Render      ();
             GameWindow.SwapBuffers      ();

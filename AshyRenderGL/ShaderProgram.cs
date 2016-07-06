@@ -124,10 +124,10 @@ namespace AshyRenderGL
 
         public static ShaderProgram Parse(ShaderAlias shader)
         {
-            Shader vertex   = new Shader($"Shaders/{shader.VertexShader}.vs",   ShaderType.VertexShader);
-            Shader fragment = new Shader($"Shaders/{shader.FragmentShader}.fs", ShaderType.FragmentShader);
+            Shader vertex           = new Shader($"Shaders/{shader.VertexShader}.vs",   ShaderType.VertexShader);
+            Shader fragment         = new Shader($"Shaders/{shader.FragmentShader}.fs", ShaderType.FragmentShader);
 
-            return new ShaderProgram(shader.Uniform, vertex, fragment);
+            return                  ( new ShaderProgram(shader.Uniform, vertex, fragment) );
         }
 
         #endregion

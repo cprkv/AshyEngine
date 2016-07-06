@@ -60,6 +60,8 @@ namespace AshyGame
             float msFinished            = 16.666667f;
             Stopwatch loopTimer         = Stopwatch.StartNew();
 
+            Memory.NoGC                 = true;
+
             // main loop
             while ( ! _user.Render.GameWindow.IsExiting)
             {

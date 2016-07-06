@@ -103,7 +103,7 @@
     <Compile Include="RenderCommands\LevelCommands.cs" />
     <Compile Include="RenderCommands\RenderCommandHandler.cs" />
     <Compile Include="Techniques\GL4\DiffuseStage.cs" />
-    <Compile Include="Techniques\GL4\GL4Technique.cs" />
+    <Compile Include="Techniques\GL4\LevelTechnique.cs" />
     <Compile Include="Techniques\GL4\ParticleStage.cs" />
     <Compile Include="Techniques\GL4\SkyboxStage.cs" />
     <Compile Include="Techniques\RenderTechnique.cs" />
@@ -111,7 +111,7 @@
     <Compile Include="Render.cs" />
     <Compile Include="RenderModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scene.cs" />
+    <Compile Include="RenderingScene.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="ShaderProgram.cs" />
     <Compile Include="Skybox.cs" />
