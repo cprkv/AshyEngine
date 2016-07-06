@@ -44,8 +44,8 @@ namespace AshyRenderGL
         {
             if ( ! Buffers.ContainsKey(mesh))
             {
-                SetBufferAttributes     ( mesh );
                 SetBuferData            ( mesh );
+                SetBufferAttributes     ( mesh );
             }
             return                      ( Buffers[mesh] );
         } 

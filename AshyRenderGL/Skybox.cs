@@ -107,7 +107,7 @@ namespace AshyRenderGL
             _cube                   = RenderAPI.I.Core.RM.Get<Mesh>("Meshes/cube", AshyCore.Resource.ResourceTarget.LoadedLevelPrivateRender);
             Buf                     = Engine.I.Device.LoadMesh(_cube);
 
-          //Creating shader program 
+            //Creating shader program 
 
             var uniformTypes        = new Dictionary<string, string>
             {

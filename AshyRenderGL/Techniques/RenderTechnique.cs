@@ -23,7 +23,7 @@ namespace AshyRenderGL.Techniques
         /// Initializes render stages. Loads level data.
         /// </summary>
         /// <returns><code>true</code>, if no fails.</returns>
-        public bool Init(RenderingScene renderingScene)
+        public virtual bool Init(RenderingScene renderingScene)
         {
             RenderingScene      = renderingScene;
             var initResult      = Stages
@@ -45,7 +45,7 @@ namespace AshyRenderGL.Techniques
             Stages.ForEach      ( stage => stage.Simulate(dtime) );
         }
 
-        public void Render()
+        public virtual void Render()
         {
             Stages.ForEach      ( stage => stage.Render() );
         }

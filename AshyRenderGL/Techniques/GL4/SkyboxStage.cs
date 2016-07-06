@@ -6,12 +6,16 @@
 //  
 
 using System;
+using OpenTK.Graphics.OpenGL4;
+using Uniform = System.Collections.Generic.KeyValuePair<string, float[]>;
 
 namespace AshyRenderGL.Techniques.GL4
 {
     public class SkyboxStage : IStage
     {
         private Skybox              _skybox;
+        private bool                initialized;
+        private RenderingScene      scene;
 
         public bool Init(RenderingScene renderingScene)
         {
@@ -26,8 +30,8 @@ namespace AshyRenderGL.Techniques.GL4
                                             skyboxData["bottom"], 
                                             skyboxData["back"], 
                                             skyboxData["front"] );
-
-                return              ( true );
+                initialized         = true;
+                scene               = renderingScene;
             }
             catch (Exception e)
             {
@@ -35,13 +39,16 @@ namespace AshyRenderGL.Techniques.GL4
 #if DEBUG
                 throw;
 #endif
-                return              ( false );
+                initialized         = false;
             }
+
+            return                  ( initialized );
         }
 
         public void Free()
         {
             _skybox                 = null;
+            initialized             = false;
         }
 
         public void Simulate(float dtime)
@@ -51,7 +58,19 @@ namespace AshyRenderGL.Techniques.GL4
 
         public void Render()
         {
-            _skybox?.BindAndRender  ();
+            if( ! initialized)      return;
+            GL.Disable              ( EnableCap.DepthTest );
+            GL.Disable              ( EnableCap.CullFace );
+            _skybox.ShaderProgram.Use();
+            _skybox.ShaderProgram.SetUniform(
+                new Uniform("viewProjectionMat",    scene.Camera.View.Transpose().ClipRotation().Values),
+                new Uniform("modelMat",             scene.Camera.Proj.Values)
+                );
+
+            _skybox.BindAndRender   ();
+
+            GL.Disable              ( EnableCap.CullFace );
+            GL.Enable               ( EnableCap.DepthTest );
         }
     }
 }

@@ -5,11 +5,9 @@
 // This product are licensed under MICROSOFT REFERENCE SOURCE LICENSE(MS-RSL).
 //  
 
-using System;
 using System.Drawing;
 using System.Runtime.ConstrainedExecution;
 using AshyCommon;
-using AshyCommon.Math;
 using AshyCore;
 using AshyCore.Input;
 using OpenTK;
@@ -112,7 +110,10 @@ namespace AshyRenderGL
 
         public void SwapBuffers()
         {
-            PrivateWindow.SwapBuffers       ();
+            if ( ! PrivateWindow.IsExiting)
+            {
+                PrivateWindow.SwapBuffers   ();
+            }
         }
 
         #endregion
