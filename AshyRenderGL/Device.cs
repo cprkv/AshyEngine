@@ -42,14 +42,23 @@ namespace AshyRenderGL
 
         public BuffersLayout LoadMesh(Mesh mesh)
         {
-            if ( ! Buffers.ContainsKey(mesh))
+            if ( ! Buffers.ContainsKey(mesh) )
             {
                 SetBuferData            ( mesh );
                 SetBufferAttributes     ( mesh );
             }
             return                      ( Buffers[mesh] );
-        } 
+        }
 
+        public RenderTexture LoadTexture(Texture texture)
+        {
+            return                      ( Textures.GetOrAdd(texture, _ => RenderTexture.Load(texture)) );
+        }
+
+        public ShaderProgram LoadShader(ShaderAlias shader)
+        {
+            return                      ( ShaderPrograms.GetOrAdd(shader, _ => ShaderProgram.Parse(shader).Compile()) );
+        }
 
         #region Private Methods
 
