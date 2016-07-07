@@ -6,7 +6,6 @@
 //  
 
 using System;
-using AshyCore;
 using AshyCore.EngineAPI.EngineCommands;
 
 namespace AshyGame.GameCommands
@@ -50,34 +49,6 @@ namespace AshyGame.GameCommands
         {
             Engine.I.Level              = null;
             return                      ( EngineCommandResult.Success ); 
-        }
-    }
-
-
-
-    internal static class ChangeLevel
-    {
-        internal static EngineCommandResult Process(AshyCore.EngineAPI.EngineCommands.ChangeLevel c)
-        {
-            Engine.I.Level              = null;
-            if ( ! CoreAPI.I.CheckAllInitialized || c == null )
-                return                  ( EngineCommandResult.Failed );
-
-            try
-            {
-                Engine.I.Level          = c.LoadingLevel;
-                Engine.I.Level.Load     ();
-            }
-            catch (Exception e)
-            {
-                GameAPI.I.Core.Log.Error("--- Change level failed in AshyGame module ---", e);
-#if DEBUG
-                throw;
-#else
-                return                  ( EngineCommandResult.CriticalFailed );
-#endif
-            }
-            return                      ( EngineCommandResult.Success );
         }
     }
 }

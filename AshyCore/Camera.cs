@@ -15,35 +15,6 @@ using AshyCore.EntitySystem;
 
 namespace AshyCore
 {
-    [Obsolete("Not used anymore", true)]
-    public struct Vec3States
-    {
-        public Vec3 Old { get; set; }
-        public Vec3 New { get; set; }
-
-        public Vec3States(Vec3 @new, Vec3 old)
-        {
-            New = @new;
-            Old = old;
-        }
-    }
-
-    [Obsolete("Not used anymore", true)]
-    public struct CameraPlane
-    {
-        public Vec3 Dir { get; }
-        public Vec3 Right { get; }
-
-        public CameraPlane(Vec3 dir, Vec3 right)
-        {
-            Dir = dir;
-            Right = right;
-        }
-    }
-
-    [Obsolete("Not used anymore", true)]
-    public delegate CameraPlane DirectionSolver(Vec3States dir, Vec3States right);
-
     /// <summary>
     /// Represents camera pinhole for 3D viewer.
     /// </summary>
@@ -85,58 +56,46 @@ namespace AshyCore
             Dir = new Vec3(0.0f, 0.0f, 1.0f);
             Up = new Vec3(0.0f, 1.0f, 0.0f);
 
-            //Engine.Instance.AddFrameIteration((sender, f) =>
-            //{
-            //    Engine.Instance.Level.Player.Camera.InterpolationDeg += 0.001f;
-            //    if (Engine.Instance.Level.Player.Camera.InterpolationDeg > 1)
-            //        Engine.Instance.Level.Player.Camera.InterpolationDeg = 0;
-            //    Engine.Instance.Level.Player.Camera.Eye = BezierCurve.Interpolate(Engine.Instance.Level.Player.Camera.InterpolationDeg);
-            //});
 
-            //Func<Vec3, Vec3> s = x =>
+            //CoreAPI.I.Render.GameWindow.RenderFrame += dtime =>
             //{
-            //    var t = x.Z;
-            //    x.Z = x.Y;
-            //    x.Y = t;
-            //    return x;
+            //    InterpolationDeg += 0.001f;
+            //    if (InterpolationDeg > 1)
+            //        InterpolationDeg = 0;
+            //    Eye = BezierCurve.Interpolate(InterpolationDeg);
             //};
 
-            //var nodes = new List<BezierCurve.Segment>()
-            //{
-            //    new BezierCurve.Segment(
-            //        s(new Vec3(100.53f, 215.14f, 56.80f)),
-            //        s(new Vec3(79.77f, 123.19f,  9.0534f)),
-            //        s(new Vec3(98.59f, 184.501f, 41.549f)),
-            //        s(new Vec3(98, 174, 17))),
+            Func<Vec3, Vec3> s = x =>
+            {
+                var t = x.Z;
+                x.Z = x.Y;
+                x.Y = t;
+                return x;
+            };
 
-            //    new BezierCurve.Segment(
-            //        s(new Vec3(79.77f, 123.19f, 9.0534f)),
-            //        s(new Vec3(10.86f, 75.62f, 3.919f)),
-            //        s(new Vec3(68.5f, 92, 4.2f)),
-            //        s(new Vec3(24.56f, 103.406f, 7.402f))),
+            var nodes = new List<BezierCurve.Segment>()
+            {
+                new BezierCurve.Segment(
+                    s(new Vec3(100.53f, 215.14f, 56.80f)),
+                    s(new Vec3(79.77f, 123.19f,  9.0534f)),
+                    s(new Vec3(98.59f, 184.501f, 41.549f)),
+                    s(new Vec3(98, 174, 17))),
 
-            //    new BezierCurve.Segment(
-            //        s(new Vec3(10.86f, 75.62f, 3.919f)),
-            //        s(new Vec3(-4.76f, -15.6333f, 4.8115f)),
-            //        s(new Vec3(-1.4198f, -50.72926f, 0.49342f)),
-            //        s(new Vec3(-4.8484f, -4.20976f, 4.64704f))),
-            //};
+                new BezierCurve.Segment(
+                    s(new Vec3(79.77f, 123.19f, 9.0534f)),
+                    s(new Vec3(10.86f, 75.62f, 3.919f)),
+                    s(new Vec3(68.5f, 92, 4.2f)),
+                    s(new Vec3(24.56f, 103.406f, 7.402f))),
 
-            //BezierCurve = new BezierCurve(nodes, 10);
+                new BezierCurve.Segment(
+                    s(new Vec3(10.86f, 75.62f, 3.919f)),
+                    s(new Vec3(-4.76f, -15.6333f, 4.8115f)),
+                    s(new Vec3(-4.4198f, -5.72926f, 4.49342f)),
+                    s(new Vec3(-4.8484f, -4.20976f, 4.64704f))),
+            };
 
-            //DEBUG DRAW CURVE
-            //var i = 4;
+            BezierCurve = new BezierCurve(nodes, 10);
 
-            //var entity = Engine.Instance.Level.GetEntity("sphere_0004");
-            //foreach (var p in nodes.SelectMany(segment => segment.Defuse(1)))
-            //{
-            //    Engine.Instance.Level.Spawn(
-            //        new Entity(entity,
-            //            $"sphere_000{++i}",
-            //            p,
-            //            entity.Scale,
-            //            entity.Rotation.ToEulerAngles()));
-            //}
         }
 
         #endregion

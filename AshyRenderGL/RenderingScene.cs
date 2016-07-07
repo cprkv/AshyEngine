@@ -23,7 +23,6 @@ namespace AshyRenderGL
 
         public Vec3                                 LightPosition { get; }
 
-
         #endregion
 
 
@@ -36,9 +35,23 @@ namespace AshyRenderGL
             {
                 Width               = Engine.I.GameWindow.Width,
                 Height              = Engine.I.GameWindow.Height,
-                Dir                 = new Vec3(1, 1, 1).Norm(),
+                Dir                 = new Vec3(1, 0, 1).Norm(),
                 Eye                 = new Vec3(-3.910404f, 6.532519f, -8.444711f),
                 Right               = new Vec3(-0.821857f, 0.000000f, -0.051417f)
+            };
+            Engine.I.GameWindow.RenderFrame += dtime =>
+            {
+                Camera.InterpolationDeg += 0.001f;
+                if (Camera.InterpolationDeg > 1)
+                    Camera.InterpolationDeg = 0;
+                Camera.Eye = Camera.BezierCurve.Interpolate(Camera.InterpolationDeg);
+                Camera.Dir = (RenderAPI.I.Game.Level.GetEntity("factory_0001").Position - Camera.Eye).Norm();
+            };
+
+            Engine.I.GameWindow.Resize += size =>
+            {
+                Camera.Width        = size.Width;
+                Camera.Height       = size.Height;
             };
 
             RenderableEntities      = entities

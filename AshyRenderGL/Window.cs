@@ -73,8 +73,8 @@ namespace AshyRenderGL
             PrivateWindow.Mouse.ButtonUp    += (sender, args) => 
                 MouseButtonUp?.Invoke       ( (MouseButton) args.Button, args.Position );
 
-            PrivateWindow.RenderFrame       += (sender, args) => 
-                RenderFrame?.Invoke         ( (float) args.Time );
+            //PrivateWindow.RenderFrame       += (sender, args) => 
+            //    RenderFrame?.Invoke         ( (float) args.Time );
 
             PrivateWindow.Mouse.Move        += (sender, args) => 
                 MouseMove?.Invoke           ( new Point(args.XDelta, args.YDelta), args.Position );
@@ -105,6 +105,7 @@ namespace AshyRenderGL
 
         public void ProcessEvents()
         {
+            RenderFrame?.Invoke             ( 30f );
             PrivateWindow.ProcessEvents     ();
         }
 

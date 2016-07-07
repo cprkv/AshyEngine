@@ -131,7 +131,8 @@ namespace AshyCore.Resource
                 s.Replace                   ( "\\", "/" );
 
             Func<string, string> getExtension = s => 
-                s.Substring                 ( s.LastIndexOf(".", StringComparison.Ordinal) + 1 );
+                s.Substring                 ( s.LastIndexOf(".", StringComparison.Ordinal) + 1 )
+                 .ToLower                   ();
 
             Func<string, string> getFileName = s =>
             {
@@ -150,8 +151,8 @@ namespace AshyCore.Resource
                 extension                   = directory                                                                 
                     .Select                 ( normalizePath )                                               
                     .Where                  ( s => getFileName(s) == filename )
-                    .Select                 ( getExtension )                                  
-                    .FirstOrDefault         ()
+                    .Select                 ( getExtension )
+                    .FirstOrDefault         ( s => _resourceConstructors.Keys.Contains(s) )                                  
                     ?.ToLower               ();
 
                 if (extension == null)

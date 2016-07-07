@@ -31,7 +31,7 @@ namespace AshyRenderGL.Techniques.GL4
             GL.Enable           ( EnableCap.Blend );
             GL.Enable           ( IndexedEnableCap.Blend, 0 );
             
-           //GL.ClearColor       ( Color.FromArgb(50, 50, 50) );
+            GL.ClearColor       ( Color.FromArgb(50, 50, 50) );
             GL.Hint             ( HintTarget.PerspectiveCorrectionHint, HintMode.Nicest );
 
             return ( base.Init(renderingScene) );
