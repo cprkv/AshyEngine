@@ -41,9 +41,10 @@ namespace AshyCore.Resource
             {
                 { ConfigResource.FileExtension,         (path, target, fs) => new ConfigResource     (path, target, fs) },
                 { LuaScriptResource.FileExtension,      (path, target, fs) => new LuaScriptResource  (path, target, fs) },
-                { MeshesResource.FileExtension,         (path, target, fs) => new MeshesResource (path, target, fs) },
+                { MeshesResource.FileExtension,         (path, target, fs) => new MeshesResource     (path, target, fs) },
                 { TextureJpegResource.FileExtension,    (path, target, fs) => new TextureJpegResource(path, target, fs) },
                 { TexturePngResource.FileExtension,     (path, target, fs) => new TexturePngResource (path, target, fs) },
+                { BezierCurveResource.FileExtension,    (path, target, fs) => new BezierCurveResource(path, target, fs) },
             };
         }
 

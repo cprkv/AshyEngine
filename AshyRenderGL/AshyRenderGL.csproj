@@ -96,8 +96,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DepthMap.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Light\DirectLightCaster.cs" />
+    <Compile Include="Light\ILightCaster.cs" />
+    <Compile Include="Light\PointLightCaster.cs" />
     <Compile Include="RenderAPI.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="RenderCommands\LevelCommands.cs" />
@@ -105,6 +109,7 @@
     <Compile Include="Techniques\GL4\DiffuseStage.cs" />
     <Compile Include="Techniques\GL4\LevelTechnique.cs" />
     <Compile Include="Techniques\GL4\ParticleStage.cs" />
+    <Compile Include="Techniques\GL4\ShadowStage.cs" />
     <Compile Include="Techniques\GL4\SkyboxStage.cs" />
     <Compile Include="Techniques\RenderTechnique.cs" />
     <Compile Include="RenderTexture.cs" />
@@ -131,9 +136,6 @@
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

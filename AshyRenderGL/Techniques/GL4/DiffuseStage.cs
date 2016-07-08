@@ -63,7 +63,7 @@ namespace AshyRenderGL.Techniques.GL4
         {
             foreach (var ent in scene.RenderableEntities)
             {
-                GL.BindVertexArray              (_device.Buffers[ent.Value.Mesh].VertexArrayObjectId );
+                GL.BindVertexArray              (_device.Buffers[ent.Value.Mesh.Id].VertexArrayObjectId );
 
                 // set shader
                 var shaderProgram               = _device.ShaderPrograms[ent.Value.Material.Shader];
@@ -83,7 +83,7 @@ namespace AshyRenderGL.Techniques.GL4
                 if (ent.Value.Material.HasNormal)
                     _device.Textures[ent.Value.Material.Normal].Bind(1);
 
-                GL.DrawArrays(PrimitiveType.Triangles, 0, ent.Value.Mesh.VertIndices.Length);
+                GL.DrawArrays(PrimitiveType.Triangles, 0, ent.Value.Mesh.IndexLength);
             }
         }
     }

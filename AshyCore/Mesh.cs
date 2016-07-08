@@ -17,24 +17,30 @@ namespace AshyCore
     /// </summary>
     public struct BufferDataDesctiption
     {
-        public Vec3[] Data { get; }
-        public uint[] Indecies { get; }
+        public static readonly List<WeakReference> HoldingData = new List<WeakReference>();
+        public Vec3[]               Data        { get; }
+        public uint[]               Indecies    { get; }
 
         public BufferDataDesctiption(Vec3[] data, uint[] indecies)
         {
-            Data = data;
-            Indecies = indecies;
+            Data                    = data;
+            Indecies                = indecies;
+            HoldingData.AddRange(new List<WeakReference>
+            {
+                new WeakReference( Data    , false ),
+                new WeakReference( Indecies, false ),
+            });
         }
 
         /// <summary>
         /// Size of vertices in bytes.
         /// </summary>
-        public int SizeOfVertices => Data.Length * Vec3.SizeInBytes;
+        public int SizeOfVertices   => Data.Length * Vec3.SizeInBytes;
 
         /// <summary>
         /// Size of vertIndices in bytes.
         /// </summary>
-        public int SizeOfIndices => Indecies.Length * sizeof(uint);
+        public int SizeOfIndices    => Indecies.Length * sizeof(uint);
     }
 
 
@@ -46,14 +52,16 @@ namespace AshyCore
     {
         #region Properties
 
-        private static long _globalMeshId = 0;
-        private long _id;
-        public Vec3[] Vertices { get; protected set; }
-        public Vec3[] UVW { get; protected set; }
-        public Vec3[] Normals { get; protected set; }
-        public uint[] VertIndices { get; protected set; }
-        public uint[] NormIndices { get; protected set; }
-        public uint[] UVWIndices { get; protected set; }
+        public static readonly List<WeakReference> HoldingData = new List<WeakReference>();
+        private static long         _globalMeshId   = 0;
+        public readonly long        Id;
+        public Vec3[]               Vertices        { get; protected set; }
+        public Vec3[]               UVW             { get; protected set; }
+        public Vec3[]               Normals         { get; protected set; }
+        public uint[]               VertIndices     { get; protected set; }
+        public int                  IndexLength     { get; }
+        public uint[]               NormIndices     { get; protected set; }
+        public uint[]               UVWIndices      { get; protected set; }
 
 
         #endregion
@@ -63,13 +71,23 @@ namespace AshyCore
 
         public Mesh(Vec3[] vertices, Vec3[] uvw, Vec3[] normals, uint[] vertIndices, uint[] uvwIndices, uint[] normIndices)
         {
-            Vertices = vertices;
-            UVW = uvw;
-            Normals = normals;
-            VertIndices = vertIndices;
-            UVWIndices = uvwIndices;
-            NormIndices = normIndices;
-            _id = _globalMeshId++;
+            Vertices                = vertices;
+            UVW                     = uvw;
+            Normals                 = normals;
+            VertIndices             = vertIndices;
+            IndexLength             = VertIndices.Length;
+            UVWIndices              = uvwIndices;
+            NormIndices             = normIndices;
+            Id                      = _globalMeshId++;
+            HoldingData.AddRange(new List<WeakReference>
+            {
+                new WeakReference( Vertices   , false ),
+                new WeakReference( UVW        , false ),
+                new WeakReference( Normals    , false ),
+                new WeakReference( VertIndices, false ),
+                new WeakReference( UVWIndices , false ),
+                new WeakReference( NormIndices, false ),
+            });
         }
 
         #endregion
@@ -82,56 +100,62 @@ namespace AshyCore
         /// </returns>
         public BufferDataDesctiption GetBufferData() 
         {
-            List<Vec3> result = new List<Vec3>();
+            var result              = new List<Vec3>();
 
-            Action<int> addVnUnN = i =>
+            Action<int> addVnUnN    = i =>
             {
-                result.Add(Vertices[VertIndices[i]]);
-                result.Add(UVW[UVWIndices[i]]);
-                result.Add(Normals[NormIndices[i]]);
+                result.Add          ( Vertices[VertIndices[i]] );
+                result.Add          ( UVW[UVWIndices[i]] );
+                result.Add          ( Normals[NormIndices[i]] );
             };
 
             for (int i = 0; i < VertIndices.Length; i += 3)
             {
                 // calculates tangent and bitangent
-                var v0 = Vertices[VertIndices[i + 0]];
-                var v1 = Vertices[VertIndices[i + 1]];
-                var v2 = Vertices[VertIndices[i + 2]];
-                var u0 = UVW[UVWIndices[i + 0]];
-                var u1 = UVW[UVWIndices[i + 1]];
-                var u2 = UVW[UVWIndices[i + 2]];
-                Vec3 dpos1 = v1 - v0;
-                Vec3 dpos2 = v2 - v0;
-                Vec3 duv1 = u1 - u0;
-                Vec3 duv2 = u2 - u0;
-                float r = 1.0f / (duv1.X * duv2.Y - duv1.Y * duv2.X);
-                Vec3 tangent = (dpos1 * duv2.Y - dpos2 * duv1.Y) * r;
+                var v0              = Vertices[VertIndices[i + 0]];
+                var v1              = Vertices[VertIndices[i + 1]];
+                var v2              = Vertices[VertIndices[i + 2]];
+                var u0              = UVW[UVWIndices[i + 0]];
+                var u1              = UVW[UVWIndices[i + 1]];
+                var u2              = UVW[UVWIndices[i + 2]];
+                Vec3 dpos1          = v1 - v0;
+                Vec3 dpos2          = v2 - v0;
+                Vec3 duv1           = u1 - u0;
+                Vec3 duv2           = u2 - u0;
+                float r             = 1.0f / (duv1.X * duv2.Y - duv1.Y * duv2.X);
+                Vec3 tangent        = (dpos1 * duv2.Y - dpos2 * duv1.Y) * r;
 
-                addVnUnN(i);
-                result.Add(tangent);
-
-                addVnUnN(i + 1);
-                result.Add(tangent);
-
-                addVnUnN(i + 2);
-                result.Add(tangent);
+                addVnUnN            ( i );
+                result.Add          ( tangent );
+                                      
+                addVnUnN            ( i + 1 );
+                result.Add          ( tangent );
+                                      
+                addVnUnN            ( i + 2 );
+                result.Add          ( tangent );
             }
 
-            var plainIndecies = Enumerable.Range(0, VertIndices.Length)
-                .Select(x => (uint)x)
-                .ToArray();
-            return new BufferDataDesctiption(result.ToArray(), plainIndecies);
+            var plainIndecies       = Enumerable
+                .Range              ( 0, VertIndices.Length )
+                .Select             ( x => (uint)x )
+                .ToArray            ();
+
+            return                  ( new BufferDataDesctiption(result.ToArray(), plainIndecies) );
         }
 
         public bool Equals(Mesh other)
         {
-            //return Vertices.SequenceEqual(other.Vertices)
-            //    && UVW.SequenceEqual(other.UVW)
-            //    && Normals.SequenceEqual(other.Normals)
-            //    && NormIndices.SequenceEqual(other.NormIndices)
-            //    && VertIndices.SequenceEqual(other.VertIndices)
-            //    && UVWIndices.SequenceEqual(other.UVWIndices);
-            return _id == other._id;
+            return                  ( Id == other.Id );
+        }
+
+        public void Free()
+        {
+            Vertices                = null;
+            UVW                     = null;
+            Normals                 = null;
+            VertIndices             = null;
+            UVWIndices              = null;
+            NormIndices             = null;
         }
 
         #endregion

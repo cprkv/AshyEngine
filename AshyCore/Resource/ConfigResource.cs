@@ -36,7 +36,7 @@ namespace AshyCore.Resource
         #endregion
 
 
-        #region Methods
+        #region Methods 
 
         public override object Load(string path, VFS.IFileSystem fs)
         {

@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using AshyCommon.Math;
 using AshyCore.EntitySystem;
+using AshyCore.Resource;
 
 namespace AshyCore
 {
@@ -65,36 +66,36 @@ namespace AshyCore
             //    Eye = BezierCurve.Interpolate(InterpolationDeg);
             //};
 
-            Func<Vec3, Vec3> s = x =>
-            {
-                var t = x.Z;
-                x.Z = x.Y;
-                x.Y = t;
-                return x;
-            };
+            //Func<Vec3, Vec3> s = x =>
+            //{
+            //    var t = x.Z;
+            //    x.Z = x.Y;
+            //    x.Y = t;
+            //    return x;
+            //};
 
-            var nodes = new List<BezierCurve.Segment>()
-            {
-                new BezierCurve.Segment(
-                    s(new Vec3(100.53f, 215.14f, 56.80f)),
-                    s(new Vec3(79.77f, 123.19f,  9.0534f)),
-                    s(new Vec3(98.59f, 184.501f, 41.549f)),
-                    s(new Vec3(98, 174, 17))),
+            //var nodes = new List<BezierCurve.Segment>()
+            //{
+            //    new BezierCurve.Segment(
+            //        s(new Vec3(100.53f, 215.14f, 56.80f)),
+            //        s(new Vec3(79.77f, 123.19f,  9.0534f)),
+            //        s(new Vec3(98.59f, 184.501f, 41.549f)),
+            //        s(new Vec3(98, 174, 17))),
 
-                new BezierCurve.Segment(
-                    s(new Vec3(79.77f, 123.19f, 9.0534f)),
-                    s(new Vec3(10.86f, 75.62f, 3.919f)),
-                    s(new Vec3(68.5f, 92, 4.2f)),
-                    s(new Vec3(24.56f, 103.406f, 7.402f))),
+            //    new BezierCurve.Segment(
+            //        s(new Vec3(79.77f, 123.19f, 9.0534f)),
+            //        s(new Vec3(10.86f, 75.62f, 3.919f)),
+            //        s(new Vec3(68.5f, 92, 4.2f)),
+            //        s(new Vec3(24.56f, 103.406f, 7.402f))),
 
-                new BezierCurve.Segment(
-                    s(new Vec3(10.86f, 75.62f, 3.919f)),
-                    s(new Vec3(-4.76f, -15.6333f, 4.8115f)),
-                    s(new Vec3(-4.4198f, -5.72926f, 4.49342f)),
-                    s(new Vec3(-4.8484f, -4.20976f, 4.64704f))),
-            };
+            //    new BezierCurve.Segment(
+            //        s(new Vec3(10.86f, 75.62f, 3.919f)),
+            //        s(new Vec3(-4.76f, -15.6333f, 4.8115f)),
+            //        s(new Vec3(-4.4198f, -5.72926f, 4.49342f)),
+            //        s(new Vec3(-4.8484f, -4.20976f, 4.64704f))),
+            //};
 
-            BezierCurve = new BezierCurve(nodes, 10);
+            BezierCurve = Engine.I.RM.Get<BezierCurve>("Curves/posis", ResourceTarget.Engine);
 
         }
 

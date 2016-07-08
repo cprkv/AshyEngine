@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using AshyCommon;
+using AshyCommon.Math;
 using AshyCore;
 using AshyCore.Debug;
 using AshyCore.EngineAPI;
 using AshyCore.EngineAPI.EngineCommands;
+using AshyCore.EntitySystem;
 
 namespace AshyCore.CoreCommands
 {
@@ -16,9 +20,10 @@ namespace AshyCore.CoreCommands
         /// </summary>
         internal static EngineCommandResult CollectResources()
         {
-            int uncollected         = Engine.I.RM.CollectWaiting(rtype => rtype >= Resource.ResourceTarget.LoadedLevel);
-            if (uncollected != 0)
-                Memory.Collect      ( showLog: true );
+            Engine.I.RM.CollectWaiting( rtype => rtype >= Resource.ResourceTarget.LoadedLevel );
+            Memory.Collect          ( showLog: true );
+            Memory.CompactHeap      ();
+
 
             return                  ( EngineCommandResult.Success );
         }
@@ -31,7 +36,17 @@ namespace AshyCore.CoreCommands
     {
         public EngineCommandResult Execute(IEngineCommand c)
         {
-            return                  ( LevelCommandsHelper.CollectResources() );
+            CoreAPI.I.Game.Level.Entities
+                .Where              ( e => e.HasComponent(ComponentType.Geom) )
+                .Select             ( e => e.Get<GeomComponent>(ComponentType.Geom).Mesh )
+                .ForEach            ( m => m.Free() );
+            var result              = LevelCommandsHelper.CollectResources();
+
+            var aliveMeshes         = Mesh.HoldingData.Count(h => h.IsAlive);
+            var aliveMeshesData     = BufferDataDesctiption.HoldingData.Count(h => h.IsAlive);
+            Engine.I.Log.Info       ($"Alive meshes: {aliveMeshes}, Alive meshes data: {aliveMeshesData}");
+
+            return                  ( result );
         }
     }
     

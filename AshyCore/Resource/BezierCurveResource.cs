@@ -13,7 +13,7 @@ namespace AshyCore.Resource
     {
         #region Properties
 
-        public static readonly string FileExtension = "ini";
+        public static readonly string FileExtension = "crv";
 
         private static CultureInfo _parsingCulture = null;
 
@@ -23,7 +23,7 @@ namespace AshyCore.Resource
             {
                 if (_parsingCulture == null)
                 {
-                    _parsingCulture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+                    _parsingCulture     = (CultureInfo)CultureInfo.CurrentCulture.Clone();
                     _parsingCulture.NumberFormat.CurrencyDecimalSeparator = ".";
                 }
                 return (_parsingCulture);
@@ -46,23 +46,26 @@ namespace AshyCore.Resource
 
         public override object Load(string path, VFS.IFileSystem fs)
         {
-            var confResource = new ConfigResource(path, Target, fs);
-            var data = (ConfigTable) confResource.RC;
+            var parser                  = ConfigResource.Parser;
+            var text                    = fs
+                .ReadLines              ( $"{path}.{FileExtension}" )
+                .Aggregate              ( "", (a, b) => a + b + "\r\n" );
 
-            var length = int.Parse(data["curve"]["amount"]);
-            var  segments = new BezierCurve.Segment[length];
+            var data                    = new ConfigTable(parser.Parse(text));
+
+            var length                  = int.Parse(data["curve"]["amount"]) - 1;
+            var segments                = new BezierCurve.Segment[length];
 
             for (int i = 0; i < length; i++)
             {
-                var start = Vec3.Parse(data["s" + i]["start"]);
-                var end = Vec3.Parse(data["s" + i]["end"]);
-                var dir_start = Vec3.Parse(data["s" + i]["dir_start"]);
-                var dir_end = Vec3.Parse(data["s" + i]["dir_end"]);
-                segments[i] = new BezierCurve.Segment(start, end, dir_start, dir_end);
+                var start               = Vec3.Parse(data["s" + i]["start"]);
+                var end                 = Vec3.Parse(data["s" + i]["end"]);
+                var dirStart            = Vec3.Parse(data["s" + i]["dir_start"]);
+                var dirEnd              = Vec3.Parse(data["s" + i]["dir_end"]);
+                segments[i]             = new BezierCurve.Segment(start, end, dirStart, dirEnd);
             }
 
-
-            return new BezierCurve(segments.ToList(), 10);
+            return                      ( new BezierCurve(segments.ToList(), 10) );
         }
         
         #endregion

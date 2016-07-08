@@ -12,6 +12,7 @@ using AshyCore;
 using AshyCore.Input;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL4;
 
 namespace AshyRenderGL
 {
@@ -48,7 +49,7 @@ namespace AshyRenderGL
 
         #region Constructor and destructor
 
-        internal Window(string title = null, int width = 800, int height = 600, bool fullScreen = false)
+        internal Window(string title = null, int width = 1920, int height = 1080, bool fullScreen = true)
         {
             if (title == null)
                 title                       = "AshyEngine build " + AssemblyUtils.BuildNumber;
@@ -59,7 +60,7 @@ namespace AshyRenderGL
                                                               title, 
                                                               fullScreen 
                                                                   ? GameWindowFlags.Fullscreen 
-                                                                  : GameWindowFlags.Default );
+                                                                  : GameWindowFlags.Default);
 
             _windowCenter                   = new Point(PrivateWindow.Width/2, PrivateWindow.Height/2);
             PressedKeys                     = new bool[131];

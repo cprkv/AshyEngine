@@ -24,13 +24,13 @@ namespace AshyRenderGL
 
     public class Device
     {
-        public Dictionary<Mesh,         BuffersLayout> Buffers { get; private set; }
+        public Dictionary<long,         BuffersLayout> Buffers { get; private set; }
         public Dictionary<Texture,      RenderTexture> Textures { get; private set; }
         public Dictionary<ShaderAlias,  ShaderProgram> ShaderPrograms { get; private set; }
 
         public void Initialize()
         {
-            Buffers                     = new Dictionary<Mesh, BuffersLayout>(32);
+            Buffers                     = new Dictionary<long, BuffersLayout>(32);
             Textures                    = new Dictionary<Texture, RenderTexture>(32);
             ShaderPrograms              = new Dictionary<ShaderAlias, ShaderProgram>(32);
         }
@@ -42,12 +42,12 @@ namespace AshyRenderGL
 
         public BuffersLayout LoadMesh(Mesh mesh)
         {
-            if ( ! Buffers.ContainsKey(mesh) )
+            if ( ! Buffers.ContainsKey(mesh.Id) )
             {
                 SetBuferData            ( mesh );
                 SetBufferAttributes     ( mesh );
             }
-            return                      ( Buffers[mesh] );
+            return                      ( Buffers[mesh.Id] );
         }
 
         public RenderTexture LoadTexture(Texture texture)
@@ -64,7 +64,7 @@ namespace AshyRenderGL
 
         private void SetBufferAttributes(Mesh mesh)
         {
-            var buf                     = Buffers.GetOrAdd(mesh, _ => new BuffersLayout());
+            var buf                     = Buffers.GetOrAdd(mesh.Id, _ => new BuffersLayout());
             buf.VertexArrayObjectId     = GL.GenVertexArray();
             GL.BindVertexArray          ( buf.VertexArrayObjectId );
 
@@ -87,17 +87,16 @@ namespace AshyRenderGL
 
         private void SetBuferData(Mesh mesh)
         {
-            Buffers.GetOrAdd    ( mesh, _ => new BuffersLayout() );
-            var buf             = Buffers[mesh];
-            var data            = mesh.GetBufferData();
+            var buf                     = Buffers.GetOrAdd(mesh.Id, _ => new BuffersLayout());
+            var data                    = mesh.GetBufferData();
 
-            buf.VertexBufferId  = GL.GenBuffer();
-            GL.BindBuffer       ( BufferTarget.ArrayBuffer, buf.VertexBufferId );
-            GL.BufferData       ( BufferTarget.ArrayBuffer, data.SizeOfVertices, data.Data, BufferUsageHint.StaticDraw );
+            buf.VertexBufferId          = GL.GenBuffer();
+            GL.BindBuffer               ( BufferTarget.ArrayBuffer, buf.VertexBufferId );
+            GL.BufferData               ( BufferTarget.ArrayBuffer, data.SizeOfVertices, data.Data, BufferUsageHint.StaticDraw );
 
-            buf.IndexBufferId   = GL.GenBuffer();
-            GL.BindBuffer       ( BufferTarget.ElementArrayBuffer, buf.IndexBufferId );
-            GL.BufferData       ( BufferTarget.ElementArrayBuffer, data.SizeOfIndices, data.Indecies, BufferUsageHint.StaticDraw );
+            buf.IndexBufferId           = GL.GenBuffer();
+            GL.BindBuffer               ( BufferTarget.ElementArrayBuffer, buf.IndexBufferId );
+            GL.BufferData               ( BufferTarget.ElementArrayBuffer, data.SizeOfIndices, data.Indecies, BufferUsageHint.StaticDraw );
         }
 
         #endregion

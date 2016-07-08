@@ -95,6 +95,10 @@ namespace AshyRenderGL
                 {
                     GL.UniformMatrix4( loc, 1, false, u.Value );
                 }
+                if (utype == "float")
+                {
+                    GL.Uniform1     ( loc, 1, u.Value );
+                }
             }
         }
 

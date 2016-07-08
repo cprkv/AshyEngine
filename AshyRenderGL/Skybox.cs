@@ -47,7 +47,7 @@ namespace AshyRenderGL
 
             GL.BindVertexArray      ( Buf.VertexArrayObjectId );
             GL.BindTexture          ( TextureTarget.TextureCubeMap, TextureId );
-            GL.DrawArrays           ( PrimitiveType.Triangles, 0, _cube.VertIndices.Length );
+            GL.DrawArrays           ( PrimitiveType.Triangles, 0, _cube.IndexLength );
             GL.BindVertexArray      ( 0 );
         }
 

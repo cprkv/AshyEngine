@@ -18,8 +18,9 @@ namespace AshyRenderGL.Techniques.GL4
             Stages              = new Queue<IStage>(3);
 
             Stages.Enqueue      ( new SkyboxStage() );
-            Stages.Enqueue      ( new DiffuseStage() );
-          //Stages.Enqueue      ( new ParticleStage() );
+            //Stages.Enqueue      ( new DiffuseStage() );
+            Stages.Enqueue      ( new ShadowStage() );
+            //Stages.Enqueue      ( new ParticleStage() );
         }
 
         public override bool Init(RenderingScene renderingScene)
